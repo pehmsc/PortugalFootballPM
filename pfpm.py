@@ -175,7 +175,7 @@ if league and htn and atn and st.session_state.confirmed:
             # Add cumulative time to events data, resetting for each unique match
             match_events = events_df.copy()
             match_events['cumulative_mins'] = match_events['minute'] + (1/60) * match_events['second']
-            # Add time increment to cumulative minutos based on period of game.
+            # Add time increment to cumulative minutes based on period of game.
             for period in np.arange(1, match_events['period'].max() + 1, 1):
                 if period > 1:
                     t_delta = match_events[match_events['period'] == period - 1]['cumulative_mins'].max() - \
@@ -489,7 +489,7 @@ if league and htn and atn and st.session_state.confirmed:
     hgoal_count = hgoal_count + len(awaydf[(awaydf['teamName']==ateamName) & (awaydf['type']=='Goal') & (awaydf['qualifiers'].str.contains('OwnGoal'))])
     agoal_count = agoal_count + len(homedf[(homedf['teamName']==hteamName) & (homedf['type']=='Goal') & (homedf['qualifiers'].str.contains('OwnGoal'))])
     
-    df_teamNameId = pd.read_csv('https://raw.githubusercontent.com/Pehmsc/Post-Match-Report-2.0/refs/heads/main/teams_name_and_id.csv')
+    df_teamNameId = pd.read_csv('https://raw.githubusercontent.com/adnaaan433/Post-Match-Report-2.0/refs/heads/main/teams_name_and_id.csv')
     hftmb_tid = df_teamNameId[df_teamNameId['teamName']==hteamName].teamId.to_list()[0]
     aftmb_tid = df_teamNameId[df_teamNameId['teamName']==ateamName].teamId.to_list()[0]
     
@@ -499,20 +499,20 @@ if league and htn and atn and st.session_state.confirmed:
     tab1, tab2, tab3, tab4 = st.tabs(['Análise da Equipa', 'Análise do Jogador', 'Estatísticas do Jogo', 'Melhores Jogadores'])
     
     with tab1:
-        an_tp = st.selectbox('Análise da Equipa Tipo:', ['Rede de Passes', 'Mapa de Calor Acções Defensivas', 'Passes Progressivos', 'Transporte Progressivo', 'Mapa de Remates', 'GR Defesas', 'Impulso do Jogo',
+        an_tp = st.selectbox('Análise da Equipa Tipo:', ['Rede de Passes', 'Mapa de Calor das Acções Defensivas', 'Passes Progressivos', 'Transporte Progressivo', 'Mapa de Remates', 'GR Defesas', 'Impulso do Jogo',
                              'Entrada da Área e Passes Entre Linhas', 'Entradas Último Terço', 'Entradas na Área', 'High-Turnovers', 'Chances Creating Zones', 'Crosses', 'Team Domination Zones', 'Pass Target Zones'], index=0, key='analysis_type')
         # if st.session_state.analysis_type:
         if an_tp == 'Rede de Passes':
             # st.header(f'{st.session_state.analysis_type}')
             st.header(f'{an_tp}')
             def pass_network(ax, team_name, col, phase_tag):
-                if phase_tag=='Final do Jogo':
+                if phase_tag=='Full Time':
                     df_pass = df.copy()
                     df_pass = df_pass.reset_index(drop=True)
-                elif phase_tag == 'Primeira Parte':
+                elif phase_tag == 'First Half':
                     df_pass = df[df['period']=='FirstHalf']
                     df_pass = df_pass.reset_index(drop=True)
-                elif phase_tag == 'Segunda Parte':
+                elif phase_tag == 'Second Half':
                     df_pass = df[df['period']=='SecondHalf']
                     df_pass = df_pass.reset_index(drop=True)
                 # phase_time_from = df_pass.loc[0, 'minute']
@@ -606,43 +606,43 @@ if league and htn and atn and st.session_state.confirmed:
             
                 v_comp = round((1 - ((fwd_line_h-def_line_h)/105))*100, 2)
                 
-                if phase_tag == 'Final do Jogo':
-                    ax.text(34, 112, 'Final do Jogo: 0-90 minutos', color=col, fontsize=15, ha='center', va='center')
+                if phase_tag == 'Full Time':
+                    ax.text(34, 112, 'Full Time: 0-90 minutes', color=col, fontsize=15, ha='center', va='center')
                     ax.text(34, 108, f'Total Pass: {len(total_pass)} | Accurate: {len(accrt_pass)} | Accuracy: {accuracy}%', color=col, fontsize=12, ha='center', va='center')
-                elif phase_tag == 'Primeira Parte':
-                    ax.text(34, 112, 'Primeira Parte: 0-45 minutos', color=col, fontsize=15, ha='center', va='center')
+                elif phase_tag == 'First Half':
+                    ax.text(34, 112, 'First Half: 0-45 minutes', color=col, fontsize=15, ha='center', va='center')
                     ax.text(34, 108, f'Total Pass: {len(total_pass)} | Accurate: {len(accrt_pass)} | Accuracy: {accuracy}%', color=col, fontsize=12, ha='center', va='center')
-                elif phase_tag == 'Segunda Parte':
-                    ax.text(34, 112, 'Segunda Parte: 45-90 minutos', color=col, fontsize=15, ha='center', va='center')
+                elif phase_tag == 'Second Half':
+                    ax.text(34, 112, 'Second Half: 45-90 minutes', color=col, fontsize=15, ha='center', va='center')
                     ax.text(34, 108, f'Total Pass: {len(total_pass)} | Accurate: {len(accrt_pass)} | Accuracy: {accuracy}%', color=col, fontsize=12, ha='center', va='center')
                 # elif phase_tag == 'Before Sub':
-                #     ax.text(34, 112, f'Before Subs: 0-{int(phase_time_to)} minutos', color=col, fontsize=15, ha='center', va='center')
+                #     ax.text(34, 112, f'Before Subs: 0-{int(phase_time_to)} minutes', color=col, fontsize=15, ha='center', va='center')
                 #     ax.text(34, 108, f'Total Pass: {len(total_pass)} | Accurate: {len(accrt_pass)} | Accuracy: {accuracy}%', color=col, fontsize=12, ha='center', va='center')
                 # elif phase_tag == 'After Sub':
-                #     ax.text(34, 112, f'After Subs: {int(phase_time_from)}-90 minutos', color=col, fontsize=15, ha='center', va='center')
+                #     ax.text(34, 112, f'After Subs: {int(phase_time_from)}-90 minutes', color=col, fontsize=15, ha='center', va='center')
                 #     ax.text(34, 108, f'Total Pass: {len(total_pass)} | Accurate: {len(accrt_pass)} | Accuracy: {accuracy}%', color=col, fontsize=12, ha='center', va='center')
                 ax.text(34, -5, f"On The Ball\nVertical Compactness (shaded area): {v_comp}%", fontsize=12, ha='center', va='center')
                 
                 return pass_btn
                     
-            pn_time_phase = st.pills(" ", ['Final do Jogo', 'Primeira Parte', 'Segunda Parte'], default='Final do Jogo', key='pn_time_pill')
+            pn_time_phase = st.pills(" ", ['Full Time', 'First Half', 'Second Half'], default='Full Time', key='pn_time_pill')
             
-            if pn_time_phase=='Final do Jogo':
+            if pn_time_phase=='Full Time':
                 fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-                home_pass_btn = pass_network(axs[0], hteamName, hcol, 'Final do Jogo')
-                away_pass_btn = pass_network(axs[1], ateamName, acol, 'Final do Jogo')
-            if pn_time_phase=='Primeira Parte':
+                home_pass_btn = pass_network(axs[0], hteamName, hcol, 'Full Time')
+                away_pass_btn = pass_network(axs[1], ateamName, acol, 'Full Time')
+            if pn_time_phase=='First Half':
                 fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-                home_pass_btn = pass_network(axs[0], hteamName, hcol, 'Primeira Parte')
-                away_pass_btn = pass_network(axs[1], ateamName, acol, 'Primeira Parte')
-            if pn_time_phase=='Segunda Parte':
+                home_pass_btn = pass_network(axs[0], hteamName, hcol, 'First Half')
+                away_pass_btn = pass_network(axs[1], ateamName, acol, 'First Half')
+            if pn_time_phase=='Second Half':
                 fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-                home_pass_btn = pass_network(axs[0], hteamName, hcol, 'Segunda Parte')
-                away_pass_btn = pass_network(axs[1], ateamName, acol, 'Segunda Parte')
+                home_pass_btn = pass_network(axs[0], hteamName, hcol, 'Second Half')
+                away_pass_btn = pass_network(axs[1], ateamName, acol, 'Second Half')
                 
             fig_text(0.5, 1.05, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=30, fontweight='bold', ha='center', va='center', ax=fig)
             fig.text(0.5, 1.01, 'Rede de Passes', fontsize=20, ha='center', va='center')
-            fig.text(0.5, 0.97, '@Pehmsc', fontsize=10, ha='center', va='center')
+            fig.text(0.5, 0.97, '@adnaaan433', fontsize=10, ha='center', va='center')
             
             fig.text(0.5, 0.05, '*Circles = Starter Players, Box = Substituted On Players, Numbers inside = Jersey Numbers of the Players', fontsize=10, fontstyle='italic', ha='center', va='center')
             fig.text(0.5, 0.03, '*Width & Brightness of the Lines represent the amount of Successful Open-Play Passes between the Players', fontsize=10, fontstyle='italic', ha='center', va='center')
@@ -665,7 +665,7 @@ if league and htn and atn and st.session_state.confirmed:
                 st.write(f'{ateamName} Passing Pairs:')
                 st.dataframe(away_pass_btn, hide_index=True)
             
-        if an_tp == 'Mapa de Calor Acções Defensivas':
+        if an_tp == 'Mapa de Calor das Acções Defensivas':
             # st.header(f'{st.session_state.analysis_type}')
             st.header(f'{an_tp}')
             
@@ -680,12 +680,12 @@ if league and htn and atn and st.session_state.confirmed:
                                            (df['type'] == 'Interception') |
                                            (df['type'] == 'Tackle')]
                 df_def = df.loc[def_acts_id, ["x", "y", "teamName", "name", "type", "outcomeType", "period"]]
-                if phase_tag=='Final do Jogo':
+                if phase_tag=='Full Time':
                     df_def = df_def.reset_index(drop=True)
-                elif phase_tag=='Primeira Parte':
+                elif phase_tag=='First Half':
                     df_def = df_def[df_def['period']=='FirstHalf']
                     df_def = df_def.reset_index(drop=True)
-                elif phase_tag=='Segunda Parte':
+                elif phase_tag=='Second Half':
                     df_def = df_def[df_def['period']=='SecondHalf']
                     df_def = df_def.reset_index(drop=True)
                 
@@ -757,20 +757,20 @@ if league and htn and atn and st.session_state.confirmed:
             
                 v_comp = round((1 - ((fwd_line_h-def_line_h)/105))*100, 2)
                 
-                if phase_tag == 'Final do Jogo':
-                    ax.text(34, 112, 'Final do Jogo: 0-90 minutos', color=col, fontsize=15, ha='center', va='center')
-                    ax.text(34, 108, f'Total de Ações Defensivas: {len(total_def_acts)}', color=col, fontsize=12, ha='center', va='center')
-                elif phase_tag == 'Primeira Parte':
-                    ax.text(34, 112, 'Primeira Parte: 0-45 minutos', color=col, fontsize=15, ha='center', va='center')
-                    ax.text(34, 108, f'Total de Ações Defensivas: {len(total_def_acts)}', color=col, fontsize=12, ha='center', va='center')
-                elif phase_tag == 'Segunda Parte':
-                    ax.text(34, 112, 'Segunda Parte: 45-90 minutos', color=col, fontsize=15, ha='center', va='center')
-                    ax.text(34, 108, f'Total de Ações Defensivas: {len(total_def_acts)}', color=col, fontsize=12, ha='center', va='center')
+                if phase_tag == 'Full Time':
+                    ax.text(34, 112, 'Full Time: 0-90 minutes', color=col, fontsize=15, ha='center', va='center')
+                    ax.text(34, 108, f'Total Defensive Actions: {len(total_def_acts)}', color=col, fontsize=12, ha='center', va='center')
+                elif phase_tag == 'First Half':
+                    ax.text(34, 112, 'First Half: 0-45 minutes', color=col, fontsize=15, ha='center', va='center')
+                    ax.text(34, 108, f'Total Defensive Actions: {len(total_def_acts)}', color=col, fontsize=12, ha='center', va='center')
+                elif phase_tag == 'Second Half':
+                    ax.text(34, 112, 'Second Half: 45-90 minutes', color=col, fontsize=15, ha='center', va='center')
+                    ax.text(34, 108, f'Total Defensive Actions: {len(total_def_acts)}', color=col, fontsize=12, ha='center', va='center')
                 # elif phase_tag == 'Before Sub':
-                #     ax.text(34, 112, f'Before Subs: 0-{int(phase_time_to)} minutos', color=col, fontsize=15, ha='center', va='center')
+                #     ax.text(34, 112, f'Before Subs: 0-{int(phase_time_to)} minutes', color=col, fontsize=15, ha='center', va='center')
                 #     ax.text(34, 108, f'Total Pass: {len(total_pass)} | Accurate: {len(accrt_pass)} | Accuracy: {accuracy}%', color=col, fontsize=12, ha='center', va='center')
                 # elif phase_tag == 'After Sub':
-                #     ax.text(34, 112, f'After Subs: {int(phase_time_from)}-90 minutos', color=col, fontsize=15, ha='center', va='center')
+                #     ax.text(34, 112, f'After Subs: {int(phase_time_from)}-90 minutes', color=col, fontsize=15, ha='center', va='center')
                 #     ax.text(34, 108, f'Total Pass: {len(total_pass)} | Accurate: {len(accrt_pass)} | Accuracy: {accuracy}%', color=col, fontsize=12, ha='center', va='center')
                 ax.text(34, -5, f"Defensive Actions\nVertical Compactness : {v_comp}%", color=violet, fontsize=12, ha='center', va='center')
                 if team_name == hteamName:
@@ -779,28 +779,28 @@ if league and htn and atn and st.session_state.confirmed:
                     ax.text(73, avgph, f'Avg. Def. Action\nHeight: {avgph:.2f}m', color='gray', rotation=-90, ha='right', va='center')
                 return df_def_show
                     
-            dah_time_phase = st.pills(" ", ['Final do Jogo', 'Primeira Parte', 'Segunda Parte'], default='Final do Jogo', key='dah_time_pill')
+            dah_time_phase = st.pills(" ", ['Full Time', 'First Half', 'Second Half'], default='Full Time', key='dah_time_pill')
             
-            if dah_time_phase == 'Final do Jogo':
+            if dah_time_phase == 'Full Time':
                 fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-                home_df_def = def_acts_hm(axs[0], hteamName, hcol, 'Final do Jogo')
-                away_df_def = def_acts_hm(axs[1], ateamName, acol, 'Final do Jogo')
+                home_df_def = def_acts_hm(axs[0], hteamName, hcol, 'Full Time')
+                away_df_def = def_acts_hm(axs[1], ateamName, acol, 'Full Time')
                 
-            if dah_time_phase == 'Primeira Parte':
+            if dah_time_phase == 'First Half':
                 fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-                home_df_def = def_acts_hm(axs[0], hteamName, hcol, 'Primeira Parte')
-                away_df_def = def_acts_hm(axs[1], ateamName, acol, 'Primeira Parte')
-            if dah_time_phase == 'Segunda Parte':
+                home_df_def = def_acts_hm(axs[0], hteamName, hcol, 'First Half')
+                away_df_def = def_acts_hm(axs[1], ateamName, acol, 'First Half')
+            if dah_time_phase == 'Second Half':
                 fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-                home_df_def = def_acts_hm(axs[0], hteamName, hcol, 'Segunda Parte')
-                away_df_def = def_acts_hm(axs[1], ateamName, acol, 'Segunda Parte')
+                home_df_def = def_acts_hm(axs[0], hteamName, hcol, 'Second Half')
+                away_df_def = def_acts_hm(axs[1], ateamName, acol, 'Second Half')
                 
             fig_text(0.5, 1.05, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=30, fontweight='bold', ha='center', va='center', ax=fig)
-            fig.text(0.5, 1.01, 'Mapa de Calor Acções Defensivas', fontsize=20, ha='center', va='center')
-            fig.text(0.5, 0.97, '@Pehmsc', fontsize=10, ha='center', va='center')
+            fig.text(0.5, 1.01, 'Mapa de Calor das Acções Defensivas', fontsize=20, ha='center', va='center')
+            fig.text(0.5, 0.97, '@adnaaan433', fontsize=10, ha='center', va='center')
             
             fig.text(0.5, 0.05, '*Circles = Starter Players, Box = Substituted On Players, Numbers inside = Jersey Numbers of the Players', fontsize=10, fontstyle='italic', ha='center', va='center')
-            fig.text(0.5, 0.03, '*Size of the Circles/Boxes represent the amount of the Total de Ações Defensivas of the Outfield Players', fontsize=10, fontstyle='italic', ha='center', va='center')
+            fig.text(0.5, 0.03, '*Size of the Circles/Boxes represent the amount of the Total Defensive Actions of the Outfield Players', fontsize=10, fontstyle='italic', ha='center', va='center')
             
             himage = urlopen(f"https://images.fotmob.com/image_resources/logo/teamlogo/{hftmb_tid}.png")
             himage = Image.open(himage)
@@ -825,12 +825,12 @@ if league and htn and atn and st.session_state.confirmed:
             st.header(f'{an_tp}')
             
             def progressive_pass(ax, team_name, col, phase_tag):
-                if phase_tag == 'Final do Jogo':
+                if phase_tag == 'Full Time':
                     df_prop = df[(df['teamName']==team_name) & (df['outcomeType']=='Successful') & (df['prog_pass']>9.144) & (~df['qualifiers'].str.contains('Corner|Freekick')) & (df['x']>=35)]
-                elif phase_tag == 'Primeira Parte':
+                elif phase_tag == 'First Half':
                     df_fh = df[df['period'] == 'FirstHalf']
                     df_prop = df_fh[(df_fh['teamName']==team_name) & (df_fh['outcomeType']=='Successful') & (df_fh['prog_pass']>9.11) & (~df_fh['qualifiers'].str.contains('Corner|Freekick')) & (df_fh['x']>=35)]
-                elif phase_tag == 'Segunda Parte':
+                elif phase_tag == 'Second Half':
                     df_sh = df[df['period'] == 'SecondHalf']
                     df_prop = df_sh[(df_sh['teamName']==team_name) & (df_sh['outcomeType']=='Successful') & (df_sh['prog_pass']>9.11) & (~df_sh['qualifiers'].str.contains('Corner|Freekick')) & (df_sh['x']>=35)]
                 
@@ -892,12 +892,12 @@ if league and htn and atn and st.session_state.confirmed:
                 pitch.lines(df_prop.x, df_prop.y, df_prop.endX, df_prop.endY, comet=True, lw=4, color=col, ax=ax)
                 pitch.scatter(df_prop.endX, df_prop.endY, s=75, zorder=3, color=bg_color, ec=col, lw=1.5, ax=ax)
             
-                if phase_tag == 'Final do Jogo':
-                    ax.text(34, 116, 'Final do Jogo: 0-90 minutos', color=col, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Primeira Parte':
-                    ax.text(34, 116, 'Primeira Parte: 0-45 minutos', color=col, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Segunda Parte':
-                    ax.text(34, 116, 'Segunda Parte: 45-90 minutos', color=col, fontsize=13, ha='center', va='center')
+                if phase_tag == 'Full Time':
+                    ax.text(34, 116, 'Full Time: 0-90 minutes', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'First Half':
+                    ax.text(34, 116, 'First Half: 0-45 minutes', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'Second Half':
+                    ax.text(34, 116, 'Second Half: 45-90 minutes', color=col, fontsize=13, ha='center', va='center')
                 ax.text(34, 112, f'Open-Play Passes Progressivos: {len(df_prop)}', color=col, fontsize=13, ha='center', va='center')
                 ax.text(34, 108, f'Most by: {most_name}({most_count})', color=col, fontsize=13, ha='center', va='center')
             
@@ -914,25 +914,25 @@ if league and htn and atn and st.session_state.confirmed:
                  
                 return name_counts_df_show
             
-            pp_time_phase = st.pills(" ", ['Final do Jogo', 'Primeira Parte', 'Segunda Parte'], default='Final do Jogo', key='pp_time_pill')
-            if pp_time_phase == 'Final do Jogo':
+            pp_time_phase = st.pills(" ", ['Full Time', 'First Half', 'Second Half'], default='Full Time', key='pp_time_pill')
+            if pp_time_phase == 'Full Time':
                 fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-                home_prop = progressive_pass(axs[0], hteamName, hcol, 'Final do Jogo')
-                away_prop = progressive_pass(axs[1], ateamName, acol, 'Final do Jogo')
+                home_prop = progressive_pass(axs[0], hteamName, hcol, 'Full Time')
+                away_prop = progressive_pass(axs[1], ateamName, acol, 'Full Time')
                 
-            if pp_time_phase == 'Primeira Parte':
+            if pp_time_phase == 'First Half':
                 fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-                home_prop = progressive_pass(axs[0], hteamName, hcol, 'Primeira Parte')
-                away_prop = progressive_pass(axs[1], ateamName, acol, 'Primeira Parte')
+                home_prop = progressive_pass(axs[0], hteamName, hcol, 'First Half')
+                away_prop = progressive_pass(axs[1], ateamName, acol, 'First Half')
                 
-            if pp_time_phase == 'Segunda Parte':
+            if pp_time_phase == 'Second Half':
                 fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-                home_prop = progressive_pass(axs[0], hteamName, hcol, 'Segunda Parte')
-                away_prop = progressive_pass(axs[1], ateamName, acol, 'Segunda Parte')
+                home_prop = progressive_pass(axs[0], hteamName, hcol, 'Second Half')
+                away_prop = progressive_pass(axs[1], ateamName, acol, 'Second Half')
                 
             fig_text(0.5, 1.05, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=30, fontweight='bold', ha='center', va='center', ax=fig)
             fig.text(0.5, 1.01, 'Passes Progressivos', fontsize=20, ha='center', va='center')
-            fig.text(0.5, 0.97, '@Pehmsc', fontsize=10, ha='center', va='center')
+            fig.text(0.5, 0.97, '@adnaaan433', fontsize=10, ha='center', va='center')
             
             fig.text(0.5, 0.02, '*Passes Progressivos : Open-Play Successful Passes that move the ball at least 10 yards towards the Opponent Goal Center', fontsize=10, fontstyle='italic', ha='center', va='center')
             fig.text(0.5, 0.00, '*Excluding the passes started from Own Defensive Third of the Pitch', fontsize=10, fontstyle='italic', ha='center', va='center')
@@ -959,12 +959,12 @@ if league and htn and atn and st.session_state.confirmed:
             # st.header(f'{st.session_state.analysis_type}')
             st.header(f'{an_tp}')
             def progressive_carry(ax, team_name, col, phase_tag):
-                if phase_tag == 'Final do Jogo':
+                if phase_tag == 'Full Time':
                     df_proc = df[(df['teamName']==team_name) & (df['prog_carry']>9.144) & (df['endX']>=35)]
-                elif phase_tag == 'Primeira Parte':
+                elif phase_tag == 'First Half':
                     df_fh = df[df['period'] == 'FirstHalf']
                     df_proc = df_fh[(df_fh['teamName']==team_name) & (df_fh['prog_carry']>9.11) & (df_fh['endX']>=35)]
-                elif phase_tag == 'Segunda Parte':
+                elif phase_tag == 'Second Half':
                     df_sh = df[df['period'] == 'SecondHalf']
                     df_proc = df_sh[(df_sh['teamName']==team_name) & (df_sh['prog_carry']>9.11) & (df_sh['endX']>=35)]
                 
@@ -1028,12 +1028,12 @@ if league and htn and atn and st.session_state.confirmed:
                                                     alpha=0.9, linewidth=2, linestyle='--')
                     ax.add_patch(arrow)
             
-                if phase_tag == 'Final do Jogo':
-                    ax.text(34, 116, 'Final do Jogo: 0-90 minutos', color=col, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Primeira Parte':
-                    ax.text(34, 116, 'Primeira Parte: 0-45 minutos', color=col, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Segunda Parte':
-                    ax.text(34, 116, 'Segunda Parte: 45-90 minutos', color=col, fontsize=13, ha='center', va='center')
+                if phase_tag == 'Full Time':
+                    ax.text(34, 116, 'Full Time: 0-90 minutes', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'First Half':
+                    ax.text(34, 116, 'First Half: 0-45 minutes', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'Second Half':
+                    ax.text(34, 116, 'Second Half: 45-90 minutes', color=col, fontsize=13, ha='center', va='center')
                 ax.text(34, 112, f'Transporte Progressivo: {len(df_proc)}', color=col, fontsize=13, ha='center', va='center')
                 ax.text(34, 108, f'Most by: {most_name}({most_count})', color=col, fontsize=13, ha='center', va='center')
             
@@ -1050,25 +1050,25 @@ if league and htn and atn and st.session_state.confirmed:
                  
                 return name_counts_df_show
             
-            pc_time_phase = st.pills(" ", ['Final do Jogo', 'Primeira Parte', 'Segunda Parte'], default='Final do Jogo', key='pc_time_pill')
-            if pc_time_phase == 'Final do Jogo':
+            pc_time_phase = st.pills(" ", ['Full Time', 'First Half', 'Second Half'], default='Full Time', key='pc_time_pill')
+            if pc_time_phase == 'Full Time':
                 fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-                home_proc = progressive_carry(axs[0], hteamName, hcol, 'Final do Jogo')
-                away_proc = progressive_carry(axs[1], ateamName, acol, 'Final do Jogo')
+                home_proc = progressive_carry(axs[0], hteamName, hcol, 'Full Time')
+                away_proc = progressive_carry(axs[1], ateamName, acol, 'Full Time')
                 
-            if pc_time_phase == 'Primeira Parte':
+            if pc_time_phase == 'First Half':
                 fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-                home_proc = progressive_carry(axs[0], hteamName, hcol, 'Primeira Parte')
-                away_proc = progressive_carry(axs[1], ateamName, acol, 'Primeira Parte')
+                home_proc = progressive_carry(axs[0], hteamName, hcol, 'First Half')
+                away_proc = progressive_carry(axs[1], ateamName, acol, 'First Half')
                 
-            if pc_time_phase == 'Segunda Parte':
+            if pc_time_phase == 'Second Half':
                 fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-                home_proc = progressive_carry(axs[0], hteamName, hcol, 'Segunda Parte')
-                away_proc = progressive_carry(axs[1], ateamName, acol, 'Segunda Parte')
+                home_proc = progressive_carry(axs[0], hteamName, hcol, 'Second Half')
+                away_proc = progressive_carry(axs[1], ateamName, acol, 'Second Half')
             
             fig_text(0.5, 1.05, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=30, fontweight='bold', ha='center', va='center', ax=fig)
             fig.text(0.5, 1.01, 'Passes Progressivos', fontsize=20, ha='center', va='center')
-            fig.text(0.5, 0.97, '@Pehmsc', fontsize=10, ha='center', va='center')
+            fig.text(0.5, 0.97, '@adnaaan433', fontsize=10, ha='center', va='center')
             
             fig.text(0.5, 0.02, '*Progressive Carry : Carries that move the ball at least 10 yards towards the Opponent Goal Center', fontsize=10, fontstyle='italic', ha='center', va='center')
             fig.text(0.5, 0.00, '*Excluding the carries ended at the Own Defensive Third of the Pitch', fontsize=10, fontstyle='italic', ha='center', va='center')
@@ -1095,12 +1095,12 @@ if league and htn and atn and st.session_state.confirmed:
             # st.header(f'{st.session_state.analysis_type}')
             st.header(f'{an_tp}')
             def plot_ShotsMap(ax, team_name, col, phase_tag):
-                if phase_tag == 'Final do Jogo':
+                if phase_tag == 'Full Time':
                     shots_df = df[(df['teamName']==team_name) & (df['type'].isin(['Goal', 'MissedShots', 'SavedShot', 'ShotOnPost']))]
-                elif phase_tag == 'Primeira Parte':
+                elif phase_tag == 'First Half':
                     shots_df = df[(df['teamName']==team_name) & (df['type'].isin(['Goal', 'MissedShots', 'SavedShot', 'ShotOnPost'])) &
                                   (df['period']=='FirstHalf')]
-                elif phase_tag == 'Segunda Parte':
+                elif phase_tag == 'Second Half':
                     shots_df = df[(df['teamName']==team_name) & (df['type'].isin(['Goal', 'MissedShots', 'SavedShot', 'ShotOnPost'])) &
                                   (df['period']=='SecondHalf')]
             
@@ -1146,12 +1146,12 @@ if league and htn and atn and st.session_state.confirmed:
                 pitch.scatter(miss_bc.x, miss_bc.y, s=700, edgecolors=col, c='None', marker='o', ax=ax)
                 pitch.scatter(goal_bc.x, goal_bc.y, s=850, edgecolors='green', linewidths=0.6, c='None', marker='football', ax=ax)
             
-                if phase_tag == 'Final do Jogo':
-                    ax.text(34, 112, 'Final do Jogo: 0-90 minutos', color=col, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Primeira Parte':
-                    ax.text(34, 112, 'Primeira Parte: 0-45 minutos', color=col, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Segunda Parte':
-                    ax.text(34, 112, 'Segunda Parte: 45-90 minutos', color=col, fontsize=13, ha='center', va='center')
+                if phase_tag == 'Full Time':
+                    ax.text(34, 112, 'Full Time: 0-90 minutes', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'First Half':
+                    ax.text(34, 112, 'First Half: 0-45 minutes', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'Second Half':
+                    ax.text(34, 112, 'Second Half: 45-90 minutes', color=col, fontsize=13, ha='center', va='center')
                 ax.text(34, 108, f'Total Shots: {len(shots_df)} | On Target: {len(goal)+len(goal_bc)+len(ontr)+len(ontr_bc)}', color=col, fontsize=13, ha='center', va='center')
             
                 pitch.scatter(12+(4*0), 64, s=200, zorder=6, edgecolors=col, c=col, marker='o', ax=ax)
@@ -1197,25 +1197,25 @@ if league and htn and atn and st.session_state.confirmed:
                 return player_stats_df
             
             
-            sm_time_phase = st.pills(" ", ['Final do Jogo', 'Primeira Parte', 'Segunda Parte'], default='Final do Jogo', key='sm_time_pill')
-            if sm_time_phase == 'Final do Jogo':
+            sm_time_phase = st.pills(" ", ['Full Time', 'First Half', 'Second Half'], default='Full Time', key='sm_time_pill')
+            if sm_time_phase == 'Full Time':
                 fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-                home_shots_stats = plot_ShotsMap(axs[0], hteamName, hcol, 'Final do Jogo')
-                away_shots_stats = plot_ShotsMap(axs[1], ateamName, acol, 'Final do Jogo')
+                home_shots_stats = plot_ShotsMap(axs[0], hteamName, hcol, 'Full Time')
+                away_shots_stats = plot_ShotsMap(axs[1], ateamName, acol, 'Full Time')
                 
-            if sm_time_phase == 'Primeira Parte':
+            if sm_time_phase == 'First Half':
                 fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-                home_shots_stats = plot_ShotsMap(axs[0], hteamName, hcol, 'Primeira Parte')
-                away_shots_stats = plot_ShotsMap(axs[1], ateamName, acol, 'Primeira Parte')
+                home_shots_stats = plot_ShotsMap(axs[0], hteamName, hcol, 'First Half')
+                away_shots_stats = plot_ShotsMap(axs[1], ateamName, acol, 'First Half')
                 
-            if sm_time_phase == 'Segunda Parte':
+            if sm_time_phase == 'Second Half':
                 fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-                home_shots_stats = plot_ShotsMap(axs[0], hteamName, hcol, 'Segunda Parte')
-                away_shots_stats = plot_ShotsMap(axs[1], ateamName, acol, 'Segunda Parte')
+                home_shots_stats = plot_ShotsMap(axs[0], hteamName, hcol, 'Second Half')
+                away_shots_stats = plot_ShotsMap(axs[1], ateamName, acol, 'Second Half')
             
             fig_text(0.5, 1.05, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=30, fontweight='bold', ha='center', va='center', ax=fig)
             fig.text(0.5, 1.01, 'Shots Map', fontsize=20, ha='center', va='center')
-            fig.text(0.5, 0.97, '@Pehmsc', fontsize=10, ha='center', va='center')
+            fig.text(0.5, 0.97, '@adnaaan433', fontsize=10, ha='center', va='center')
             
             fig.text(0.5, 0.08, '*Bigger shape means shots from Big Chances', fontsize=10, fontstyle='italic', ha='center', va='center')
             
@@ -1242,11 +1242,11 @@ if league and htn and atn and st.session_state.confirmed:
             st.header(f'{an_tp}')
             
             def plot_goal_post(ax, team_name, col, phase_tag):
-                if phase_tag == 'Final do Jogo':
+                if phase_tag == 'Full Time':
                     shots_df = df[(df['teamName']!=team_name) & (df['type'].isin(['Goal', 'MissedShots', 'SavedShot', 'ShotOnPost']))]
-                elif phase_tag == 'Primeira Parte':
+                elif phase_tag == 'First Half':
                     shots_df = df[(df['teamName']!=team_name) & (df['type'].isin(['Goal', 'MissedShots', 'SavedShot', 'ShotOnPost'])) & (df['period']=='FirstHalf')]
-                elif phase_tag == 'Segunda Parte':
+                elif phase_tag == 'Second Half':
                     shots_df = df[(df['teamName']!=team_name) & (df['type'].isin(['Goal', 'MissedShots', 'SavedShot', 'ShotOnPost'])) & (df['period']=='SecondHalf')]
             
                 shots_df['goalMouthZ'] = (shots_df['goalMouthZ']*0.75) + 38
@@ -1293,12 +1293,12 @@ if league and htn and atn and st.session_state.confirmed:
                 pitch.scatter(hPostdf_bc.goalMouthY, hPostdf_bc.goalMouthZ, marker='o', c=bg_color, zorder=3, edgecolors='orange', hatch='/////', s=1000, ax=ax)
             
             
-                if phase_tag == 'Final do Jogo':
-                    ax.text(52.5, 80, 'Final do Jogo: 0-90 minutos', color=col, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Primeira Parte':
-                    ax.text(52.5, 80, 'Primeira Parte: 0-45 minutos', color=col, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Segunda Parte':
-                    ax.text(52.5, 80, 'Segunda Parte: 45-90 minutos', color=col, fontsize=13, ha='center', va='center')
+                if phase_tag == 'Full Time':
+                    ax.text(52.5, 80, 'Full Time: 0-90 minutes', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'First Half':
+                    ax.text(52.5, 80, 'First Half: 0-45 minutes', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'Second Half':
+                    ax.text(52.5, 80, 'Second Half: 45-90 minutes', color=col, fontsize=13, ha='center', va='center')
                     
                 ax.text(52.5, 73, f'{team_name} GR Defesas', color=col, fontsize=15, fontweight='bold', ha='center', va='center')
             
@@ -1311,25 +1311,25 @@ if league and htn and atn and st.session_state.confirmed:
             
                 return
             
-            gp_time_phase = st.pills(" ", ['Final do Jogo', 'Primeira Parte', 'Segunda Parte'], default='Final do Jogo', key='gp_time_pill' )
-            if gp_time_phase == 'Final do Jogo':
+            gp_time_phase = st.pills(" ", ['Full Time', 'First Half', 'Second Half'], default='Full Time', key='gp_time_pill' )
+            if gp_time_phase == 'Full Time':
                 fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-                home_shots_stats = plot_goal_post(axs[0], hteamName, hcol, 'Final do Jogo')
-                away_shots_stats = plot_goal_post(axs[1], ateamName, acol, 'Final do Jogo')
+                home_shots_stats = plot_goal_post(axs[0], hteamName, hcol, 'Full Time')
+                away_shots_stats = plot_goal_post(axs[1], ateamName, acol, 'Full Time')
                 
-            if gp_time_phase == 'Primeira Parte':
+            if gp_time_phase == 'First Half':
                 fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-                plot_goal_post(axs[0], hteamName, hcol, 'Primeira Parte')
-                plot_goal_post(axs[1], ateamName, acol, 'Primeira Parte')
+                plot_goal_post(axs[0], hteamName, hcol, 'First Half')
+                plot_goal_post(axs[1], ateamName, acol, 'First Half')
                 
-            if gp_time_phase == 'Segunda Parte':
+            if gp_time_phase == 'Second Half':
                 fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-                plot_goal_post(axs[0], hteamName, hcol, 'Segunda Parte')
-                plot_goal_post(axs[1], ateamName, acol, 'Segunda Parte')
+                plot_goal_post(axs[0], hteamName, hcol, 'Second Half')
+                plot_goal_post(axs[1], ateamName, acol, 'Second Half')
             
             fig_text(0.5, 0.94, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=30, fontweight='bold', ha='center', va='center', ax=fig)
             fig.text(0.5, 0.89, 'GoalKeeper Saves', fontsize=20, ha='center', va='center')
-            fig.text(0.5, 0.84, '@Pehmsc', fontsize=10, ha='center', va='center')
+            fig.text(0.5, 0.84, '@adnaaan433', fontsize=10, ha='center', va='center')
             
             fig.text(0.5, 0.2, '*Bigger circle means shots from Big Chances', fontsize=10, fontstyle='italic', ha='center', va='center')
             
@@ -1406,13 +1406,13 @@ if league and htn and atn and st.session_state.confirmed:
             
                 if phase_tag=='FirstHalf':
                     ax.set_xticks(range(0, int(Momentumdf['minute'].max()), 5))
-                    ax.set_title('Primeira Parte', fontsize=20)
+                    ax.set_title('First Half', fontsize=20)
                     ax.set_xlim(-1, Momentumdf['minute'].max()+1)
                     ax.axvline(45, color='gray', linewidth=2, linestyle='dotted')
                     ax.set_ylabel('Momentum', color=line_color, fontsize=20)
                 else:
                     ax.set_xticks(range(45, int(Momentumdf['minute'].max()), 5))
-                    ax.set_title('Segunda Parte', fontsize=20)
+                    ax.set_title('Second Half', fontsize=20)
                     ax.set_xlim(44, Momentumdf['minute'].max()+1)
                     ax.axvline(90, color='gray', linewidth=2, linestyle='dotted')
                 return
@@ -1424,7 +1424,7 @@ if league and htn and atn and st.session_state.confirmed:
             
             fig_text(0.5, 1.1, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=40, fontweight='bold', ha='center', va='center', ax=fig)
             fig.text(0.5, 1.04, 'Impulso do Jogo', fontsize=30, ha='center', va='center')
-            fig.text(0.5, 0.98, '@Pehmsc', fontsize=15, ha='center', va='center')
+            fig.text(0.5, 0.98, '@adnaaan433', fontsize=15, ha='center', va='center')
             
             fig.text(0.5, -0.01, '*Momentum is the measure of the Avg. Open-Play Attacking Threat of a team per minute', fontsize=15, fontstyle='italic', ha='center', va='center')
             fig.text(0.5, -0.05, '*green circle: Goals, orange circle: own goal', fontsize=15, fontstyle='italic', ha='center', va='center')
@@ -1480,11 +1480,11 @@ if league and htn and atn and st.session_state.confirmed:
                 
                 if phase_tag == 'FirstHalf':
                     ax.set_xlim(-1, max(top_mn_list)+1)
-                    ax.set_title('Primeira Parte', fontsize=20)
+                    ax.set_title('First Half', fontsize=20)
                     ax.set_ylabel('Cumulative Expected Threat (CxT)', color=line_color, fontsize=20)
                 else:
                     ax.set_xlim(44, max(top_mn_list)+1)
-                    ax.set_title('Segunda Parte', fontsize=20)
+                    ax.set_title('Second Half', fontsize=20)
                     ax.text(htop_mint+0.5, h_max_cum, f"{hteamName}\nCxT: {h_max_cum:.2f}", fontsize=15, color=hcol)
                     ax.text(atop_mint+0.5, a_max_cum, f"{ateamName}\nCxT: {a_max_cum:.2f}", fontsize=15, color=acol)
             
@@ -1512,7 +1512,7 @@ if league and htn and atn and st.session_state.confirmed:
             
             fig_text(0.5, 1.1, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=40, fontweight='bold', ha='center', va='center', ax=fig)
             fig.text(0.5, 1.04, 'Cumulative Expected Threat (CxT)', fontsize=30, ha='center', va='center')
-            fig.text(0.5, 0.98, '@Pehmsc', fontsize=15, ha='center', va='center')
+            fig.text(0.5, 0.98, '@adnaaan433', fontsize=15, ha='center', va='center')
             
             fig.text(0.5, -0.01, '*Cumulative xT is the sum of the consecutive xT from Open-Play Pass and Carries', fontsize=15, fontstyle='italic', ha='center', va='center')
             
@@ -1531,11 +1531,11 @@ if league and htn and atn and st.session_state.confirmed:
             st.header('Passes Into Zone14 & Half-Spaces')
             
             def plot_zone14i(ax, team_name, col, phase_tag):
-                if phase_tag == 'Final do Jogo':
+                if phase_tag == 'Full Time':
                     pass_df = df[(df['teamName']==team_name) & (df['type']=='Pass') & (df['outcomeType']=='Successful') & (~df['qualifiers'].str.contains('Freekick|Corner'))]
-                elif phase_tag == 'Primeira Parte':
+                elif phase_tag == 'First Half':
                     pass_df = df[(df['teamName']==team_name) & (df['type']=='Pass') & (df['outcomeType']=='Successful') & (~df['qualifiers'].str.contains('Freekick|Corner')) & (df['period']=='FirstHalf')]
-                elif phase_tag == 'Segunda Parte':
+                elif phase_tag == 'Second Half':
                     pass_df = df[(df['teamName']==team_name) & (df['type']=='Pass') & (df['outcomeType']=='Successful') & (~df['qualifiers'].str.contains('Freekick|Corner')) & (df['period']=='SecondHalf')]
             
                 pitch = VerticalPitch(pitch_type='uefa', pitch_color=bg_color, line_color=line_color, linewidth=2, corner_arcs=True)
@@ -1582,12 +1582,12 @@ if league and htn and atn and st.session_state.confirmed:
                 ax.text(68/3, 39, 'Right H.S.', size=15, color='k', fontweight='bold', ha='center', va='center', zorder=10)
                 ax.text(68/3, 34, f' \nTotal:{len(rhs_pass)}\nKeyPass:{len(rhs_kp)}\nAssist:{len(rhs_as)}', size=13, color='k', ha='center', va='center', zorder=10)
                 
-                if phase_tag == 'Final do Jogo':
-                    ax.text(34, 110, 'Final do Jogo: 0-90 minutos', color=col, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Primeira Parte':
-                    ax.text(34, 110, 'Primeira Parte: 0-45 minutos', color=col, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Segunda Parte':
-                    ax.text(34, 110, 'Segunda Parte: 45-90 minutos', color=col, fontsize=13, ha='center', va='center')
+                if phase_tag == 'Full Time':
+                    ax.text(34, 110, 'Full Time: 0-90 minutes', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'First Half':
+                    ax.text(34, 110, 'First Half: 0-45 minutes', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'Second Half':
+                    ax.text(34, 110, 'Second Half: 45-90 minutes', color=col, fontsize=13, ha='center', va='center')
             
                 z14_pass['zone'] = 'Zone 14'
                 lhs_pass['zone'] = 'Left Half Space'
@@ -1600,20 +1600,20 @@ if league and htn and atn and st.session_state.confirmed:
                 return stats
             
             fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-            zhsi_time_phase = st.pills(" ", ['Final do Jogo', 'Primeira Parte', 'Segunda Parte'], default='Final do Jogo', key='Into')
-            if zhsi_time_phase=='Final do Jogo':
-                home_z14hsi_stats = plot_zone14i(axs[0], hteamName, hcol, 'Final do Jogo')
-                away_z14hsi_stats = plot_zone14i(axs[1], ateamName, acol, 'Final do Jogo')
-            if zhsi_time_phase=='Primeira Parte':
-                home_z14hsi_stats = plot_zone14i(axs[0], hteamName, hcol, 'Primeira Parte')
-                away_z14hsi_stats = plot_zone14i(axs[1], ateamName, acol, 'Primeira Parte')
-            if zhsi_time_phase=='Segunda Parte':
-                home_z14hsi_stats = plot_zone14i(axs[0], hteamName, hcol, 'Segunda Parte')
-                away_z14hsi_stats = plot_zone14i(axs[1], ateamName, acol, 'Segunda Parte')
+            zhsi_time_phase = st.pills(" ", ['Full Time', 'First Half', 'Second Half'], default='Full Time', key='Into')
+            if zhsi_time_phase=='Full Time':
+                home_z14hsi_stats = plot_zone14i(axs[0], hteamName, hcol, 'Full Time')
+                away_z14hsi_stats = plot_zone14i(axs[1], ateamName, acol, 'Full Time')
+            if zhsi_time_phase=='First Half':
+                home_z14hsi_stats = plot_zone14i(axs[0], hteamName, hcol, 'First Half')
+                away_z14hsi_stats = plot_zone14i(axs[1], ateamName, acol, 'First Half')
+            if zhsi_time_phase=='Second Half':
+                home_z14hsi_stats = plot_zone14i(axs[0], hteamName, hcol, 'Second Half')
+                away_z14hsi_stats = plot_zone14i(axs[1], ateamName, acol, 'Second Half')
             
             fig_text(0.5, 1.05, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=30, fontweight='bold', ha='center', va='center', ax=fig)
             fig.text(0.5, 1.01, 'Passes into Zone14 and Half-Spaces', fontsize=20, ha='center', va='center')
-            fig.text(0.5, 0.97, '@Pehmsc', fontsize=10, ha='center', va='center')
+            fig.text(0.5, 0.97, '@adnaaan433', fontsize=10, ha='center', va='center')
             
             fig.text(0.5, 0.1, '*Open-Play Successful Passes which ended inside Zone14 and Half-Spaces area', fontsize=10, fontstyle='italic', ha='center', va='center')
             
@@ -1638,11 +1638,11 @@ if league and htn and atn and st.session_state.confirmed:
             st.header('Passes From Zone14 & Half-Spaces')
             
             def plot_zone14f(ax, team_name, col, phase_tag):
-                if phase_tag == 'Final do Jogo':
+                if phase_tag == 'Full Time':
                     pass_df = df[(df['teamName']==team_name) & (df['type']=='Pass') & (df['outcomeType']=='Successful') & (~df['qualifiers'].str.contains('Freekick|Corner'))]
-                elif phase_tag == 'Primeira Parte':
+                elif phase_tag == 'First Half':
                     pass_df = df[(df['teamName']==team_name) & (df['type']=='Pass') & (df['outcomeType']=='Successful') & (~df['qualifiers'].str.contains('Freekick|Corner')) & (df['period']=='FirstHalf')]
-                elif phase_tag == 'Segunda Parte':
+                elif phase_tag == 'Second Half':
                     pass_df = df[(df['teamName']==team_name) & (df['type']=='Pass') & (df['outcomeType']=='Successful') & (~df['qualifiers'].str.contains('Freekick|Corner')) & (df['period']=='SecondHalf')]
             
                 pitch = VerticalPitch(pitch_type='uefa', pitch_color=bg_color, line_color=line_color, linewidth=2, corner_arcs=True)
@@ -1689,12 +1689,12 @@ if league and htn and atn and st.session_state.confirmed:
                 ax.text(68/3, 39, 'Right H.S.', size=15, color='k', fontweight='bold', ha='center', va='center', zorder=10)
                 ax.text(68/3, 34, f' \nTotal:{len(rhs_pass)}\nKeyPass:{len(rhs_kp)}\nAssist:{len(rhs_as)}', size=13, color='k', ha='center', va='center', zorder=10)
                 
-                if phase_tag == 'Final do Jogo':
-                    ax.text(34, 110, 'Final do Jogo: 0-90 minutos', color=col, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Primeira Parte':
-                    ax.text(34, 110, 'Primeira Parte: 0-45 minutos', color=col, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Segunda Parte':
-                    ax.text(34, 110, 'Segunda Parte: 45-90 minutos', color=col, fontsize=13, ha='center', va='center')
+                if phase_tag == 'Full Time':
+                    ax.text(34, 110, 'Full Time: 0-90 minutes', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'First Half':
+                    ax.text(34, 110, 'First Half: 0-45 minutes', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'Second Half':
+                    ax.text(34, 110, 'Second Half: 45-90 minutes', color=col, fontsize=13, ha='center', va='center')
                 
                 z14_pass['zone'] = 'Zone 14'
                 lhs_pass['zone'] = 'Left Half Space'
@@ -1707,20 +1707,20 @@ if league and htn and atn and st.session_state.confirmed:
                 return stats
             
             fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-            zhsf_time_phase = st.pills(" ", ['Final do Jogo', 'Primeira Parte', 'Segunda Parte'], default='Final do Jogo', key='From')
-            if zhsf_time_phase=='Final do Jogo':
-                home_z14hsf_stats = plot_zone14f(axs[0], hteamName, hcol, 'Final do Jogo')
-                away_z14hsf_stats = plot_zone14f(axs[1], ateamName, acol, 'Final do Jogo')
-            if zhsf_time_phase=='Primeira Parte':
-                home_z14hsf_stats = plot_zone14f(axs[0], hteamName, hcol, 'Primeira Parte')
-                away_z14hsf_stats = plot_zone14f(axs[1], ateamName, acol, 'Primeira Parte')
-            if zhsf_time_phase=='Segunda Parte':
-                home_z14hsf_stats = plot_zone14f(axs[0], hteamName, hcol, 'Segunda Parte')
-                away_z14hsf_stats = plot_zone14f(axs[1], ateamName, acol, 'Segunda Parte')
+            zhsf_time_phase = st.pills(" ", ['Full Time', 'First Half', 'Second Half'], default='Full Time', key='From')
+            if zhsf_time_phase=='Full Time':
+                home_z14hsf_stats = plot_zone14f(axs[0], hteamName, hcol, 'Full Time')
+                away_z14hsf_stats = plot_zone14f(axs[1], ateamName, acol, 'Full Time')
+            if zhsf_time_phase=='First Half':
+                home_z14hsf_stats = plot_zone14f(axs[0], hteamName, hcol, 'First Half')
+                away_z14hsf_stats = plot_zone14f(axs[1], ateamName, acol, 'First Half')
+            if zhsf_time_phase=='Second Half':
+                home_z14hsf_stats = plot_zone14f(axs[0], hteamName, hcol, 'Second Half')
+                away_z14hsf_stats = plot_zone14f(axs[1], ateamName, acol, 'Second Half')
             
             fig_text(0.5, 1.03, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=30, fontweight='bold', ha='center', va='center', ax=fig)
             fig.text(0.5, 0.99, 'Passes from Zone14 and Half-Spaces', fontsize=20, ha='center', va='center')
-            fig.text(0.5, 0.95, '@Pehmsc', fontsize=10, ha='center', va='center')
+            fig.text(0.5, 0.95, '@adnaaan433', fontsize=10, ha='center', va='center')
             
             fig.text(0.5, 0.1, '*Open-Play Successful Passes which initiated inside Zone14 and Half-Spaces area', fontsize=10, fontstyle='italic', ha='center', va='center')
             
@@ -1739,11 +1739,11 @@ if league and htn and atn and st.session_state.confirmed:
             st.header(f'{an_tp}')
             
             def final_third_entry(ax, team_name, col, phase_tag):
-                if phase_tag == 'Final do Jogo':
+                if phase_tag == 'Full Time':
                     fentry = df[(df['teamName']==team_name) & (df['type'].isin(['Pass', 'Carry'])) & (df['outcomeType']=='Successful') & (~df['qualifiers'].str.contains('Freekick|Corner'))]
-                elif phase_tag == 'Primeira Parte':
+                elif phase_tag == 'First Half':
                     fentry = df[(df['teamName']==team_name) & (df['type'].isin(['Pass', 'Carry'])) & (df['outcomeType']=='Successful') & (~df['qualifiers'].str.contains('Freekick|Corner')) & (df['period']=='FirstHalf')]
-                elif phase_tag == 'Segunda Parte':
+                elif phase_tag == 'Second Half':
                     fentry = df[(df['teamName']==team_name) & (df['type'].isin(['Pass', 'Carry'])) & (df['outcomeType']=='Successful') & (~df['qualifiers'].str.contains('Freekick|Corner')) & (df['period']=='SecondHalf')]
             
                 pitch = VerticalPitch(pitch_type='uefa', pitch_color=bg_color, line_color=line_color, linewidth=2, corner_arcs=True)
@@ -1771,16 +1771,16 @@ if league and htn and atn and st.session_state.confirmed:
                 ax.text(34, -5, f"form mid\n{len(ment)}", fontsize=13, color=line_color, ha='center', va='center')
                 ax.text(68/6, -5, f"form right\n{len(rent)}", fontsize=13, color=line_color, ha='center', va='center')
             
-                if phase_tag == 'Final do Jogo':
-                    ax.text(34, 112, 'Final do Jogo: 0-90 minutos', color=col, fontsize=13, ha='center', va='center')
+                if phase_tag == 'Full Time':
+                    ax.text(34, 112, 'Full Time: 0-90 minutes', color=col, fontsize=13, ha='center', va='center')
                     ax_text(34, 108, f'Total: {len(fep)+len(fec)} | <By Pass: {len(fep)}> | <By Carry: {len(fec)}>', ax=ax, highlight_textprops=[{'color':col}, {'color':violet}],
                             color=line_color, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Primeira Parte':
-                    ax.text(34, 112, 'Primeira Parte: 0-45 minutos', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'First Half':
+                    ax.text(34, 112, 'First Half: 0-45 minutes', color=col, fontsize=13, ha='center', va='center')
                     ax_text(34, 108, f'Total: {len(fep)+len(fec)} | <By Pass: {len(fep)}> | <By Carry: {len(fec)}>', ax=ax, highlight_textprops=[{'color':col}, {'color':violet}],
                             color=line_color, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Segunda Parte':
-                    ax.text(34, 112, 'Segunda Parte: 45-90 minutos', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'Second Half':
+                    ax.text(34, 112, 'Second Half: 45-90 minutes', color=col, fontsize=13, ha='center', va='center')
                     ax_text(34, 108, f'Total: {len(fep)+len(fec)} | <By Pass: {len(fep)}> | <By Carry: {len(fec)}>', ax=ax, highlight_textprops=[{'color':col}, {'color':violet}],
                             color=line_color, fontsize=13, ha='center', va='center')
             
@@ -1791,20 +1791,20 @@ if league and htn and atn and st.session_state.confirmed:
                 return stats
             
             fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-            fthE_time_phase = st.pills(" ", ['Final do Jogo', 'Primeira Parte', 'Segunda Parte'], default='Final do Jogo', key='fthE_time_pill')
-            if fthE_time_phase == 'Final do Jogo':
-                home_fthirdE_stats = final_third_entry(axs[0], hteamName, hcol, 'Final do Jogo')
-                away_fthirdE_stats = final_third_entry(axs[1], ateamName, acol, 'Final do Jogo')
-            if fthE_time_phase == 'Primeira Parte':
-                home_fthirdE_stats = final_third_entry(axs[0], hteamName, hcol, 'Primeira Parte')
-                away_fthirdE_stats = final_third_entry(axs[1], ateamName, acol, 'Primeira Parte')
-            if fthE_time_phase == 'Segunda Parte':
-                home_fthirdE_stats = final_third_entry(axs[0], hteamName, hcol, 'Segunda Parte')
-                away_fthirdE_stats = final_third_entry(axs[1], ateamName, acol, 'Segunda Parte')
+            fthE_time_phase = st.pills(" ", ['Full Time', 'First Half', 'Second Half'], default='Full Time', key='fthE_time_pill')
+            if fthE_time_phase == 'Full Time':
+                home_fthirdE_stats = final_third_entry(axs[0], hteamName, hcol, 'Full Time')
+                away_fthirdE_stats = final_third_entry(axs[1], ateamName, acol, 'Full Time')
+            if fthE_time_phase == 'First Half':
+                home_fthirdE_stats = final_third_entry(axs[0], hteamName, hcol, 'First Half')
+                away_fthirdE_stats = final_third_entry(axs[1], ateamName, acol, 'First Half')
+            if fthE_time_phase == 'Second Half':
+                home_fthirdE_stats = final_third_entry(axs[0], hteamName, hcol, 'Second Half')
+                away_fthirdE_stats = final_third_entry(axs[1], ateamName, acol, 'Second Half')
             
             fig_text(0.5, 1.05, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=30, fontweight='bold', ha='center', va='center', ax=fig)
             fig.text(0.5, 1.01, 'Entradas Último Terço', fontsize=20, ha='center', va='center')
-            fig.text(0.5, 0.97, '@Pehmsc', fontsize=10, ha='center', va='center')
+            fig.text(0.5, 0.97, '@adnaaan433', fontsize=10, ha='center', va='center')
             
             fig.text(0.5, 0.05, '*Open-Play Successful Passes & Carries which ended inside the Final third, starting from outside the Final third', fontsize=10, 
                      fontstyle='italic', ha='center', va='center')
@@ -1832,15 +1832,15 @@ if league and htn and atn and st.session_state.confirmed:
             st.header(f'{an_tp}')
             
             def penalty_box_entry(ax, team_name, col, phase_tag):
-                if phase_tag == 'Final do Jogo':
+                if phase_tag == 'Full Time':
                     bentry = df[(df['type'].isin(['Pass', 'Carry'])) & (df['outcomeType']=='Successful') & (df['endX']>=88.5) &
                                ~((df['x']>=88.5) & (df['y']>=13.6) & (df['y']<=54.6)) & (df['endY']>=13.6) & (df['endY']<=54.4) &
                                 (~df['qualifiers'].str.contains('CornerTaken|Freekick|ThrowIn'))]
-                elif phase_tag == 'Primeira Parte':
+                elif phase_tag == 'First Half':
                     bentry = df[(df['type'].isin(['Pass', 'Carry'])) & (df['outcomeType']=='Successful') & (df['endX']>=88.5) &
                                ~((df['x']>=88.5) & (df['y']>=13.6) & (df['y']<=54.6)) & (df['endY']>=13.6) & (df['endY']<=54.4) &
                                 (~df['qualifiers'].str.contains('CornerTaken|Freekick|ThrowIn')) & (df['period']=='FirstHalf')]
-                elif phase_tag == 'Segunda Parte':
+                elif phase_tag == 'Second Half':
                     bentry = df[(df['type'].isin(['Pass', 'Carry'])) & (df['outcomeType']=='Successful') & (df['endX']>=88.5) &
                                ~((df['x']>=88.5) & (df['y']>=13.6) & (df['y']<=54.6)) & (df['endY']>=13.6) & (df['endY']<=54.4) &
                                 (~df['qualifiers'].str.contains('CornerTaken|Freekick|ThrowIn')) & (df['period']=='SecondHalf')]
@@ -1868,16 +1868,16 @@ if league and htn and atn and st.session_state.confirmed:
                 ax.vlines(68/3, ymin=0, ymax=88.5, color='gray', ls='--', lw=2)
                 ax.vlines(136/3, ymin=0, ymax=88.5, color='gray', ls='--', lw=2)
             
-                if phase_tag == 'Final do Jogo':
-                    ax.text(34, 112, 'Final do Jogo: 0-90 minutos', color=col, fontsize=13, ha='center', va='center')
+                if phase_tag == 'Full Time':
+                    ax.text(34, 112, 'Full Time: 0-90 minutes', color=col, fontsize=13, ha='center', va='center')
                     ax_text(34, 108, f'Total: {len(bep)+len(bec)} | <By Pass: {len(bep)}> | <By Carry: {len(bec)}>', ax=ax, highlight_textprops=[{'color':col}, {'color':violet}],
                             color=line_color, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Primeira Parte':
-                    ax.text(34, 112, 'Primeira Parte: 0-45 minutos', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'First Half':
+                    ax.text(34, 112, 'First Half: 0-45 minutes', color=col, fontsize=13, ha='center', va='center')
                     ax_text(34, 108, f'Total: {len(bep)+len(bec)} | <By Pass: {len(bep)}> | <By Carry: {len(bec)}>', ax=ax, highlight_textprops=[{'color':col}, {'color':violet}],
                             color=line_color, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Segunda Parte':
-                    ax.text(34, 112, 'Segunda Parte: 45-90 minutos', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'Second Half':
+                    ax.text(34, 112, 'Second Half: 45-90 minutes', color=col, fontsize=13, ha='center', va='center')
                     ax_text(34, 108, f'Total: {len(bep)+len(bec)} | <By Pass: {len(bep)}> | <By Carry: {len(bec)}>', ax=ax, highlight_textprops=[{'color':col}, {'color':violet}],
                             color=line_color, fontsize=13, ha='center', va='center')
                     
@@ -1888,20 +1888,20 @@ if league and htn and atn and st.session_state.confirmed:
                 return stats
             
             fig, axs = plt.subplots(1,2, figsize=(15, 6), facecolor=bg_color)
-            bent_time_phase = st.pills(" ", ['Final do Jogo', 'Primeira Parte', 'Segunda Parte'], default='Final do Jogo', key='bent_time_pill')
-            if bent_time_phase == 'Final do Jogo':
-                home_boxE_stats = penalty_box_entry(axs[0], hteamName, hcol, 'Final do Jogo')
-                away_boxE_stats = penalty_box_entry(axs[1], ateamName, acol, 'Final do Jogo')
-            if bent_time_phase == 'Primeira Parte':
-                home_boxE_stats = penalty_box_entry(axs[0], hteamName, hcol, 'Primeira Parte')
-                away_boxE_stats = penalty_box_entry(axs[1], ateamName, acol, 'Primeira Parte')
-            if bent_time_phase == 'Segunda Parte':
-                home_boxE_stats = penalty_box_entry(axs[0], hteamName, hcol, 'Segunda Parte')
-                away_boxE_stats = penalty_box_entry(axs[1], ateamName, acol, 'Segunda Parte')
+            bent_time_phase = st.pills(" ", ['Full Time', 'First Half', 'Second Half'], default='Full Time', key='bent_time_pill')
+            if bent_time_phase == 'Full Time':
+                home_boxE_stats = penalty_box_entry(axs[0], hteamName, hcol, 'Full Time')
+                away_boxE_stats = penalty_box_entry(axs[1], ateamName, acol, 'Full Time')
+            if bent_time_phase == 'First Half':
+                home_boxE_stats = penalty_box_entry(axs[0], hteamName, hcol, 'First Half')
+                away_boxE_stats = penalty_box_entry(axs[1], ateamName, acol, 'First Half')
+            if bent_time_phase == 'Second Half':
+                home_boxE_stats = penalty_box_entry(axs[0], hteamName, hcol, 'Second Half')
+                away_boxE_stats = penalty_box_entry(axs[1], ateamName, acol, 'Second Half')
             
             fig_text(0.5, 1.08, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=30, fontweight='bold', ha='center', va='center', ax=fig)
             fig.text(0.5, 1.01, "Opponent's Penalty Entradas na Área", fontsize=20, ha='center', va='center')
-            fig.text(0.5, 0.96, '@Pehmsc', fontsize=10, ha='center', va='center')
+            fig.text(0.5, 0.96, '@adnaaan433', fontsize=10, ha='center', va='center')
             
             fig.text(0.5, 0.00, '*Open-Play Successful Passes & Carries which ended inside the Opponent Penalty Box, starting from outside the Penalty Box', fontsize=10, 
                      fontstyle='italic', ha='center', va='center')
@@ -1929,11 +1929,11 @@ if league and htn and atn and st.session_state.confirmed:
             st.header(f'{an_tp}')
             
             def plot_high_turnover(ax, team_name, col, phase_tag):
-                if phase_tag == 'Final do Jogo':
+                if phase_tag == 'Full Time':
                     dfhto = df.copy()
-                elif phase_tag == 'Primeira Parte':
+                elif phase_tag == 'First Half':
                     dfhto = df[df['period']=='FirstHalf']
-                elif phase_tag == 'Segunda Parte':
+                elif phase_tag == 'Second Half':
                     dfhto = df[df['period']=='SecondHalf'].reset_index(drop=True)
             
                 pitch = VerticalPitch(pitch_type='uefa', corner_arcs=True, pitch_color=bg_color, line_color=line_color, linewidth=2)
@@ -2040,12 +2040,12 @@ if league and htn and atn and st.session_state.confirmed:
                 ax.text(136/3, 18, f'Led\nto Shot:\n{shot_count}', color=bg_color, fontsize=18, fontweight='bold', ha='center', va='center')
                 ax.text(68/3, 18, f'Led\nto Goal:\n{goal_count}', color=bg_color, fontsize=18, fontweight='bold', ha='center', va='center')
             
-                if phase_tag == 'Final do Jogo':
-                    ax.text(34, 109, 'Final do Jogo: 0-90 minutos', color=col, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Primeira Parte':
-                    ax.text(34, 109, 'Primeira Parte: 0-45 minutos', color=col, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Segunda Parte':
-                    ax.text(34, 109, 'Segunda Parte: 45-90 minutos', color=col, fontsize=13, ha='center', va='center')
+                if phase_tag == 'Full Time':
+                    ax.text(34, 109, 'Full Time: 0-90 minutes', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'First Half':
+                    ax.text(34, 109, 'First Half: 0-45 minutes', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'Second Half':
+                    ax.text(34, 109, 'Second Half: 45-90 minutes', color=col, fontsize=13, ha='center', va='center')
             
                 unique_players = set(p_hto_list + p_shot_list + p_goal_list)
                 player_hto_data = {
@@ -2072,20 +2072,20 @@ if league and htn and atn and st.session_state.confirmed:
                 return player_hto_stats, player_blost_stats
             
             fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-            hto_time_phase = st.pills(" ", ['Final do Jogo', 'Primeira Parte', 'Segunda Parte'], default='Final do Jogo', key='hto_time_pill')
-            if hto_time_phase == 'Final do Jogo':
-                home_hto_stats, home_blost_stats = plot_high_turnover(axs[0], hteamName, hcol, 'Final do Jogo')
-                away_hto_stats, away_blost_stats = plot_high_turnover(axs[1], ateamName, acol, 'Final do Jogo')
-            if hto_time_phase == 'Primeira Parte':
-                home_hto_stats, home_blost_stats = plot_high_turnover(axs[0], hteamName, hcol, 'Primeira Parte')
-                away_hto_stats, away_blost_stats = plot_high_turnover(axs[1], ateamName, acol, 'Primeira Parte')
-            if hto_time_phase == 'Segunda Parte':
-                home_hto_stats, home_blost_stats = plot_high_turnover(axs[0], hteamName, hcol, 'Segunda Parte')
-                away_hto_stats, away_blost_stats = plot_high_turnover(axs[1], ateamName, acol, 'Segunda Parte')
+            hto_time_phase = st.pills(" ", ['Full Time', 'First Half', 'Second Half'], default='Full Time', key='hto_time_pill')
+            if hto_time_phase == 'Full Time':
+                home_hto_stats, home_blost_stats = plot_high_turnover(axs[0], hteamName, hcol, 'Full Time')
+                away_hto_stats, away_blost_stats = plot_high_turnover(axs[1], ateamName, acol, 'Full Time')
+            if hto_time_phase == 'First Half':
+                home_hto_stats, home_blost_stats = plot_high_turnover(axs[0], hteamName, hcol, 'First Half')
+                away_hto_stats, away_blost_stats = plot_high_turnover(axs[1], ateamName, acol, 'First Half')
+            if hto_time_phase == 'Second Half':
+                home_hto_stats, home_blost_stats = plot_high_turnover(axs[0], hteamName, hcol, 'Second Half')
+                away_hto_stats, away_blost_stats = plot_high_turnover(axs[1], ateamName, acol, 'Second Half')
             
             fig_text(0.5, 1.05, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=30, fontweight='bold', ha='center', va='center', ax=fig)
             fig.text(0.5, 1.01, 'High Turnovers', fontsize=20, ha='center', va='center')
-            fig.text(0.5, 0.97, '@Pehmsc', fontsize=10, ha='center', va='center')
+            fig.text(0.5, 0.97, '@adnaaan433', fontsize=10, ha='center', va='center')
             
             fig.text(0.5, 0.05, '*High Turnovers means winning possession within the 40m radius from the Opponent Goal Center', fontsize=10, 
                      fontstyle='italic', ha='center', va='center')
@@ -2117,11 +2117,11 @@ if league and htn and atn and st.session_state.confirmed:
             st.header(f'{an_tp}')
             
             def plot_cc_zone(ax, team_name, col, phase_tag):
-                if phase_tag == 'Final do Jogo':
+                if phase_tag == 'Full Time':
                     dfcc = df[(df['teamName']==team_name) & (df['qualifiers'].str.contains('KeyPass'))]
-                elif phase_tag == 'Primeira Parte':
+                elif phase_tag == 'First Half':
                     dfcc = df[(df['teamName']==team_name) & (df['qualifiers'].str.contains('KeyPass')) & (df['period']=='FirstHalf')]
-                elif phase_tag == 'Segunda Parte':
+                elif phase_tag == 'Second Half':
                     dfcc = df[(df['teamName']==team_name) & (df['qualifiers'].str.contains('KeyPass')) & (df['period']=='SecondHalf')]
             
                 pitch = VerticalPitch(pitch_type='uefa', corner_arcs=True, pitch_color=bg_color, line_color=line_color, line_zorder=2, linewidth=2)
@@ -2158,16 +2158,16 @@ if league and htn and atn and st.session_state.confirmed:
                 most_by = player_cc_stats.Name.to_list()[0]
                 most_count = player_cc_stats.Total_Chances_Created.to_list()[0]
             
-                if phase_tag == 'Final do Jogo':
-                    ax.text(34, 116, 'Final do Jogo: 0-90 minutos', color=col, fontsize=13, ha='center', va='center')
+                if phase_tag == 'Full Time':
+                    ax.text(34, 116, 'Full Time: 0-90 minutes', color=col, fontsize=13, ha='center', va='center')
                     ax.text(34, 112, f'Total Chances: {len(dfcc)} | Open-Play Chances: {len(opcc)}', color=col, fontsize=13, ha='center', va='center')
                     ax.text(34, 108, f'Most by: {most_by} ({most_count})', color=col, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Primeira Parte':
-                    ax.text(34, 116, 'Primeira Parte: 0-45 minutos', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'First Half':
+                    ax.text(34, 116, 'First Half: 0-45 minutes', color=col, fontsize=13, ha='center', va='center')
                     ax.text(34, 112, f'Total Chances: {len(dfcc)} | Open-Play Chances: {len(opcc)}', color=col, fontsize=13, ha='center', va='center')
                     ax.text(34, 108, f'Most by: {most_by} ({most_count})', color=col, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Segunda Parte':
-                    ax.text(34, 116, 'Segunda Parte: 45-90 minutos', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'Second Half':
+                    ax.text(34, 116, 'Second Half: 45-90 minutes', color=col, fontsize=13, ha='center', va='center')
                     ax.text(34, 112, f'Total Chances: {len(dfcc)} | Open-Play Chances: {len(opcc)}', color=col, fontsize=13, ha='center', va='center')
                     ax.text(34, 108, f'Most by: {most_by} ({most_count})', color=col, fontsize=13, ha='center', va='center')
             
@@ -2175,21 +2175,21 @@ if league and htn and atn and st.session_state.confirmed:
                 return player_cc_stats
             
             fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-            cc_time_phase = st.pills(" ", ['Final do Jogo', 'Primeira Parte', 'Segunda Parte'], default='Final do Jogo', key='cc_time_pill')
-            if cc_time_phase == 'Final do Jogo':
-                home_cc_stats = plot_cc_zone(axs[0], hteamName, hcol, 'Final do Jogo')
-                away_cc_stats = plot_cc_zone(axs[1], ateamName, acol, 'Final do Jogo')
-            if cc_time_phase == 'Primeira Parte':
-                home_cc_stats = plot_cc_zone(axs[0], hteamName, hcol, 'Primeira Parte')
-                away_cc_stats = plot_cc_zone(axs[1], ateamName, acol, 'Primeira Parte')
-            if cc_time_phase == 'Segunda Parte':
-                home_cc_stats = plot_cc_zone(axs[0], hteamName, hcol, 'Segunda Parte')
-                away_cc_stats = plot_cc_zone(axs[1], ateamName, acol, 'Segunda Parte')
+            cc_time_phase = st.pills(" ", ['Full Time', 'First Half', 'Second Half'], default='Full Time', key='cc_time_pill')
+            if cc_time_phase == 'Full Time':
+                home_cc_stats = plot_cc_zone(axs[0], hteamName, hcol, 'Full Time')
+                away_cc_stats = plot_cc_zone(axs[1], ateamName, acol, 'Full Time')
+            if cc_time_phase == 'First Half':
+                home_cc_stats = plot_cc_zone(axs[0], hteamName, hcol, 'First Half')
+                away_cc_stats = plot_cc_zone(axs[1], ateamName, acol, 'First Half')
+            if cc_time_phase == 'Second Half':
+                home_cc_stats = plot_cc_zone(axs[0], hteamName, hcol, 'Second Half')
+                away_cc_stats = plot_cc_zone(axs[1], ateamName, acol, 'Second Half')
             
             fig_text(0.5, 1.05, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=30, 
                      fontweight='bold', ha='center', va='center', ax=fig)
             fig.text(0.5, 1.01, 'Chances Creating Zones', fontsize=20, ha='center', va='center')
-            fig.text(0.5, 0.97, '@Pehmsc', fontsize=10, ha='center', va='center')
+            fig.text(0.5, 0.97, '@adnaaan433', fontsize=10, ha='center', va='center')
             
             himage = urlopen(f"https://images.fotmob.com/image_resources/logo/teamlogo/{hftmb_tid}.png")
             himage = Image.open(himage)
@@ -2214,11 +2214,11 @@ if league and htn and atn and st.session_state.confirmed:
             st.header(f'{an_tp}')
             
             def plot_crossed(ax, team_name, col, phase_tag):
-                if phase_tag == 'Final do Jogo':
+                if phase_tag == 'Full Time':
                     dfcrs = df[(df['teamName']==team_name) & (df['qualifiers'].str.contains('Cross')) & (~df['qualifiers'].str.contains('Corner|Freekick'))]
-                elif phase_tag == 'Primeira Parte':
+                elif phase_tag == 'First Half':
                     dfcrs = df[(df['teamName']==team_name) & (df['qualifiers'].str.contains('Cross')) & (~df['qualifiers'].str.contains('Corner|Freekick')) & (df['period']=='FirstHalf')]
-                elif phase_tag == 'Segunda Parte':
+                elif phase_tag == 'Second Half':
                     dfcrs = df[(df['teamName']==team_name) & (df['qualifiers'].str.contains('Cross')) & (~df['qualifiers'].str.contains('Corner|Freekick')) & (df['period']=='SecondHalf')]
             
                 pitch = VerticalPitch(pitch_type='uefa', corner_arcs=True, pitch_color=bg_color, line_color=line_color, linewidth=2, half=True)
@@ -2259,18 +2259,18 @@ if league and htn and atn and st.session_state.confirmed:
                 most_right = right_df['shortName'].value_counts().idxmax() if not right_df.empty else None
                 right_count = right_df['shortName'].value_counts().max() if not right_df.empty else 0
             
-                if phase_tag == 'Final do Jogo':
-                    ax.text(34, 116, 'Final do Jogo: 0-90 minutos', color=col, fontsize=13, ha='center', va='center')
+                if phase_tag == 'Full Time':
+                    ax.text(34, 116, 'Full Time: 0-90 minutes', color=col, fontsize=13, ha='center', va='center')
                     ax_text(34, 112, f'Total Attempts: {len(dfcrs)} | <Successful: {len(right_s)+len(left_s)}> | <Unsuccessful: {len(right_u)+len(left_u)}>', color=line_color, fontsize=12, ha='center', va='center',
                             highlight_textprops=[{'color':col}, {'color':'gray'}], ax=ax)
                     ax.text(34, 108, f'Most by: {most_by} ({most_count})', color=col, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Primeira Parte':
-                    ax.text(34, 116, 'Primeira Parte: 0-45 minutos', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'First Half':
+                    ax.text(34, 116, 'First Half: 0-45 minutes', color=col, fontsize=13, ha='center', va='center')
                     ax_text(34, 112, f'Total Attempts: {len(dfcrs)} | <Successful: {len(right_s)+len(left_s)}> | <Unsuccessful: {len(right_u)+len(left_u)}>', color=line_color, fontsize=12, ha='center', va='center',
                             highlight_textprops=[{'color':col}, {'color':'gray'}], ax=ax)
                     ax.text(34, 108, f'Most by: {most_by} ({most_count})', color=col, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Segunda Parte':
-                    ax.text(34, 116, 'Segunda Parte: 45-90 minutos', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'Second Half':
+                    ax.text(34, 116, 'Second Half: 45-90 minutes', color=col, fontsize=13, ha='center', va='center')
                     ax_text(34, 112, f'Total Attempts: {len(dfcrs)} | <Successful: {len(right_s)+len(left_s)}> | <Unsuccessful: {len(right_u)+len(left_u)}>', color=line_color, fontsize=12, ha='center', va='center',
                             highlight_textprops=[{'color':col}, {'color':'gray'}], ax=ax)
                     ax.text(34, 108, f'Most by: {most_by} ({most_count})', color=col, fontsize=13, ha='center', va='center')
@@ -2300,20 +2300,20 @@ if league and htn and atn and st.session_state.confirmed:
                 return player_crs_stats
             
             fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-            crs_time_phase = st.pills(" ", ['Final do Jogo', 'Primeira Parte', 'Segunda Parte'], default='Final do Jogo', key='crs_time_pill')
-            if crs_time_phase == 'Final do Jogo':
-                home_crs_stats = plot_crossed(axs[0], hteamName, hcol, 'Final do Jogo')
-                away_crs_stats = plot_crossed(axs[1], ateamName, acol, 'Final do Jogo')
-            if crs_time_phase == 'Primeira Parte':
-                home_crs_stats = plot_crossed(axs[0], hteamName, hcol, 'Primeira Parte')
-                away_crs_stats = plot_crossed(axs[1], ateamName, acol, 'Primeira Parte')
-            if crs_time_phase == 'Segunda Parte':
-                home_crs_stats = plot_crossed(axs[0], hteamName, hcol, 'Segunda Parte')
-                away_crs_stats = plot_crossed(axs[1], ateamName, acol, 'Segunda Parte')
+            crs_time_phase = st.pills(" ", ['Full Time', 'First Half', 'Second Half'], default='Full Time', key='crs_time_pill')
+            if crs_time_phase == 'Full Time':
+                home_crs_stats = plot_crossed(axs[0], hteamName, hcol, 'Full Time')
+                away_crs_stats = plot_crossed(axs[1], ateamName, acol, 'Full Time')
+            if crs_time_phase == 'First Half':
+                home_crs_stats = plot_crossed(axs[0], hteamName, hcol, 'First Half')
+                away_crs_stats = plot_crossed(axs[1], ateamName, acol, 'First Half')
+            if crs_time_phase == 'Second Half':
+                home_crs_stats = plot_crossed(axs[0], hteamName, hcol, 'Second Half')
+                away_crs_stats = plot_crossed(axs[1], ateamName, acol, 'Second Half')
             
             fig_text(0.5, 0.89, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=30, fontweight='bold', ha='center', va='center', ax=fig)
             fig.text(0.5, 0.85, 'Open-Play Crosses', fontsize=20, ha='center', va='center')
-            fig.text(0.5, 0.81, '@Pehmsc', fontsize=10, ha='center', va='center')
+            fig.text(0.5, 0.81, '@adnaaan433', fontsize=10, ha='center', va='center')
             
             fig.text(0.5, 0.1, '*Violet Arrow = KeyPass from Cross | Green Arrow = Assist from Cross', fontsize=10, fontstyle='italic', ha='center', va='center')
             
@@ -2340,15 +2340,15 @@ if league and htn and atn and st.session_state.confirmed:
             st.header(f'{an_tp}')
             
             def plot_congestion(ax, phase_tag):
-                if phase_tag == 'Final do Jogo':
+                if phase_tag == 'Full Time':
                     dfdz = df.copy()
-                    ax.text(52.5, 76, 'Final do Jogo: 0-90 minutos', fontsize=15, ha='center', va='center')
-                elif phase_tag == 'Primeira Parte':
+                    ax.text(52.5, 76, 'Full Time: 0-90 minutes', fontsize=15, ha='center', va='center')
+                elif phase_tag == 'First Half':
                     dfdz = df[df['period']=='FirstHalf']
-                    ax.text(52.5, 76, 'Primeira Parte: 0-45 minutos', fontsize=15, ha='center', va='center')
-                elif phase_tag == 'Segunda Parte':
+                    ax.text(52.5, 76, 'First Half: 0-45 minutes', fontsize=15, ha='center', va='center')
+                elif phase_tag == 'Second Half':
                     dfdz = df[df['period']=='SecondHalf']
-                    ax.text(52.5, 76, 'Segunda Parte: 45-90 minutos', fontsize=15, ha='center', va='center')
+                    ax.text(52.5, 76, 'Second Half: 45-90 minutes', fontsize=15, ha='center', va='center')
                 pcmap = LinearSegmentedColormap.from_list("Pearl Earring - 10 colors",  [acol, 'gray', hcol], N=20)
                 df1 = dfdz[(dfdz['teamName']==hteamName) & (dfdz['isTouch']==1) & (~dfdz['qualifiers'].str.contains('CornerTaken|Freekick|ThrowIn'))]
                 df2 = dfdz[(dfdz['teamName']==ateamName) & (dfdz['isTouch']==1) & (~dfdz['qualifiers'].str.contains('CornerTaken|Freekick|ThrowIn'))]
@@ -2422,17 +2422,17 @@ if league and htn and atn and st.session_state.confirmed:
                 return
             
             fig,ax=plt.subplots(figsize=(10,10), facecolor=bg_color)
-            tdz_time_phase = st.pills(" ", ['Final do Jogo', 'Primeira Parte', 'Segunda Parte'], default='Final do Jogo', key='tdz_time_pill')
-            if tdz_time_phase == 'Final do Jogo':
-                plot_congestion(ax, 'Final do Jogo')
-            if tdz_time_phase == 'Primeira Parte':
-                plot_congestion(ax, 'Primeira Parte')
-            if tdz_time_phase == 'Segunda Parte':
-                plot_congestion(ax, 'Segunda Parte')
+            tdz_time_phase = st.pills(" ", ['Full Time', 'First Half', 'Second Half'], default='Full Time', key='tdz_time_pill')
+            if tdz_time_phase == 'Full Time':
+                plot_congestion(ax, 'Full Time')
+            if tdz_time_phase == 'First Half':
+                plot_congestion(ax, 'First Half')
+            if tdz_time_phase == 'Second Half':
+                plot_congestion(ax, 'Second Half')
             
             fig_text(0.5, 0.92, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=22, fontweight='bold', ha='center', va='center', ax=fig)
             fig.text(0.5, 0.88, "Team's Dominating Zone", fontsize=16, ha='center', va='center')
-            fig.text(0.5, 0.18, '@Pehmsc', fontsize=10, ha='center', va='center')
+            fig.text(0.5, 0.18, '@adnaaan433', fontsize=10, ha='center', va='center')
             
             fig.text(0.5, 0.13, '*Dominating Zone means where the team had more than 55% Open-Play touches than the Opponent', fontstyle='italic', fontsize=7, ha='center', va='center')
             fig.text(0.5, 0.11, '*Contested means where the team had 45-55% Open-Play touches than the Opponent, where less than 45% there Opponent was dominant', fontstyle='italic', fontsize=7, ha='center', va='center')
@@ -2453,15 +2453,15 @@ if league and htn and atn and st.session_state.confirmed:
             st.header(f'Overall {an_tp}')
             
             def pass_target_zone(ax, team_name, col, phase_tag):
-                if phase_tag == 'Final do Jogo':
+                if phase_tag == 'Full Time':
                     dfptz = df[(df['teamName']==team_name) & (df['type']=='Pass')]
-                    ax.text(34, 109, 'Final do Jogo: 0-90 minutos', color=col, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Primeira Parte':
+                    ax.text(34, 109, 'Full Time: 0-90 minutes', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'First Half':
                     dfptz = df[(df['teamName']==team_name) & (df['type']=='Pass') & (df['period']=='FirstHalf')]
-                    ax.text(34, 109, 'Primeira Parte: 0-45 minutos', color=col, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Segunda Parte':
+                    ax.text(34, 109, 'First Half: 0-45 minutes', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'Second Half':
                     dfptz = df[(df['teamName']==team_name) & (df['type']=='Pass') & (df['period']=='SecondHalf')]
-                    ax.text(34, 109, 'Segunda Parte: 45-90 minutos', color=col, fontsize=13, ha='center', va='center')
+                    ax.text(34, 109, 'Second Half: 45-90 minutes', color=col, fontsize=13, ha='center', va='center')
             
                 pitch = VerticalPitch(pitch_type='uefa', corner_arcs=True, pitch_color=bg_color, line_color=line_color, line_zorder=2, linewidth=2)
                 pitch.draw(ax=ax)
@@ -2476,20 +2476,20 @@ if league and htn and atn and st.session_state.confirmed:
                 return
             
             fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-            ptz_time_phase = st.pills(" ", ['Final do Jogo', 'Primeira Parte', 'Segunda Parte'], default='Final do Jogo', key='overall')
-            if ptz_time_phase == 'Final do Jogo':
-                home_cc_stats = pass_target_zone(axs[0], hteamName, hcol, 'Final do Jogo')
-                away_cc_stats = pass_target_zone(axs[1], ateamName, acol, 'Final do Jogo')
-            if ptz_time_phase == 'Primeira Parte':
-                home_cc_stats = pass_target_zone(axs[0], hteamName, hcol, 'Primeira Parte')
-                away_cc_stats = pass_target_zone(axs[1], ateamName, acol, 'Primeira Parte')
-            if ptz_time_phase == 'Segunda Parte':
-                home_cc_stats = pass_target_zone(axs[0], hteamName, hcol, 'Segunda Parte')
-                away_cc_stats = pass_target_zone(axs[1], ateamName, acol, 'Segunda Parte')
+            ptz_time_phase = st.pills(" ", ['Full Time', 'First Half', 'Second Half'], default='Full Time', key='overall')
+            if ptz_time_phase == 'Full Time':
+                home_cc_stats = pass_target_zone(axs[0], hteamName, hcol, 'Full Time')
+                away_cc_stats = pass_target_zone(axs[1], ateamName, acol, 'Full Time')
+            if ptz_time_phase == 'First Half':
+                home_cc_stats = pass_target_zone(axs[0], hteamName, hcol, 'First Half')
+                away_cc_stats = pass_target_zone(axs[1], ateamName, acol, 'First Half')
+            if ptz_time_phase == 'Second Half':
+                home_cc_stats = pass_target_zone(axs[0], hteamName, hcol, 'Second Half')
+                away_cc_stats = pass_target_zone(axs[1], ateamName, acol, 'Second Half')
             
             fig_text(0.5, 1.05, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=30, fontweight='bold', ha='center', va='center', ax=fig)
             fig.text(0.5, 1.01, 'Pass Target Zones', fontsize=20, ha='center', va='center')
-            fig.text(0.5, 0.97, '@Pehmsc', fontsize=10, ha='center', va='center')
+            fig.text(0.5, 0.97, '@adnaaan433', fontsize=10, ha='center', va='center')
             
             himage = urlopen(f"https://images.fotmob.com/image_resources/logo/teamlogo/{hftmb_tid}.png")
             himage = Image.open(himage)
@@ -2504,15 +2504,15 @@ if league and htn and atn and st.session_state.confirmed:
             st.header('Successful Pass Ending Zones')
             
             def succ_pass_target_zone(ax, team_name, col, phase_tag):
-                if phase_tag == 'Final do Jogo':
+                if phase_tag == 'Full Time':
                     dfptz = df[(df['teamName']==team_name) & (df['type']=='Pass') & (df['outcomeType']=='Successful')]
-                    ax.text(34, 109, 'Final do Jogo: 0-90 minutos', color=col, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Primeira Parte':
+                    ax.text(34, 109, 'Full Time: 0-90 minutes', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'First Half':
                     dfptz = df[(df['teamName']==team_name) & (df['type']=='Pass') & (df['outcomeType']=='Successful') & (df['period']=='FirstHalf')]
-                    ax.text(34, 109, 'Primeira Parte: 0-45 minutos', color=col, fontsize=13, ha='center', va='center')
-                elif phase_tag == 'Segunda Parte':
+                    ax.text(34, 109, 'First Half: 0-45 minutes', color=col, fontsize=13, ha='center', va='center')
+                elif phase_tag == 'Second Half':
                     dfptz = df[(df['teamName']==team_name) & (df['type']=='Pass') & (df['outcomeType']=='Successful') & (df['period']=='SecondHalf')]
-                    ax.text(34, 109, 'Segunda Parte: 45-90 minutos', color=col, fontsize=13, ha='center', va='center')
+                    ax.text(34, 109, 'Second Half: 45-90 minutes', color=col, fontsize=13, ha='center', va='center')
             
                 pitch = VerticalPitch(pitch_type='uefa', corner_arcs=True, pitch_color=bg_color, line_color=line_color, line_zorder=2, linewidth=2)
                 pitch.draw(ax=ax)
@@ -2527,20 +2527,20 @@ if league and htn and atn and st.session_state.confirmed:
                 return
             
             fig, axs = plt.subplots(1,2, figsize=(15, 10), facecolor=bg_color)
-            sptz_time_phase = st.pills(" ", ['Final do Jogo', 'Primeira Parte', 'Segunda Parte'], default='Final do Jogo', key='successful_only')
-            if sptz_time_phase == 'Final do Jogo':
-                home_cc_stats = succ_pass_target_zone(axs[0], hteamName, hcol, 'Final do Jogo')
-                away_cc_stats = succ_pass_target_zone(axs[1], ateamName, acol, 'Final do Jogo')
-            if sptz_time_phase == 'Primeira Parte':
-                home_cc_stats = succ_pass_target_zone(axs[0], hteamName, hcol, 'Primeira Parte')
-                away_cc_stats = succ_pass_target_zone(axs[1], ateamName, acol, 'Primeira Parte')
-            if sptz_time_phase == 'Segunda Parte':
-                home_cc_stats = succ_pass_target_zone(axs[0], hteamName, hcol, 'Segunda Parte')
-                away_cc_stats = succ_pass_target_zone(axs[1], ateamName, acol, 'Segunda Parte')
+            sptz_time_phase = st.pills(" ", ['Full Time', 'First Half', 'Second Half'], default='Full Time', key='successful_only')
+            if sptz_time_phase == 'Full Time':
+                home_cc_stats = succ_pass_target_zone(axs[0], hteamName, hcol, 'Full Time')
+                away_cc_stats = succ_pass_target_zone(axs[1], ateamName, acol, 'Full Time')
+            if sptz_time_phase == 'First Half':
+                home_cc_stats = succ_pass_target_zone(axs[0], hteamName, hcol, 'First Half')
+                away_cc_stats = succ_pass_target_zone(axs[1], ateamName, acol, 'First Half')
+            if sptz_time_phase == 'Second Half':
+                home_cc_stats = succ_pass_target_zone(axs[0], hteamName, hcol, 'Second Half')
+                away_cc_stats = succ_pass_target_zone(axs[1], ateamName, acol, 'Second Half')
                 
             fig_text(0.5, 1.05, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=30, fontweight='bold', ha='center', va='center', ax=fig)
             fig.text(0.5, 1.01, 'Successful Pass Ending Zones', fontsize=20, ha='center', va='center')  
-            fig.text(0.5, 0.97, '@Pehmsc', fontsize=10, ha='center', va='center')
+            fig.text(0.5, 0.97, '@adnaaan433', fontsize=10, ha='center', va='center')
             
             himage = urlopen(f"https://images.fotmob.com/image_resources/logo/teamlogo/{hftmb_tid}.png")
             himage = Image.open(himage)
@@ -2897,7 +2897,7 @@ if league and htn and atn and st.session_state.confirmed:
         def generate_player_dahsboard(pname, ftmb_tid):
             fig, axs = plt.subplots(1, 3, figsize=(27, 15), facecolor='#f5f5f5')
             
-            # Calculate minutos played
+            # Calculate minutes played
             mins_played = playing_time(pname)
             
             # Generate individual plots
@@ -2908,9 +2908,9 @@ if league and htn and atn and st.session_state.confirmed:
             
             # Add text and images to the figure
             fig.text(0.21, 1.02, f'{pname}', fontsize=50, fontweight='bold', ha='left', va='center')
-            fig.text(0.21, 0.97, f'in {hteamName} {hgoal_count} - {agoal_count} {ateamName}  |  minutos played: {mins_played}', 
+            fig.text(0.21, 0.97, f'in {hteamName} {hgoal_count} - {agoal_count} {ateamName}  |  Minutes played: {mins_played}', 
                      fontsize=30, ha='left', va='center')
-            fig.text(0.87, 0.995, '@Pehmsc', fontsize=20, ha='right', va='center')
+            fig.text(0.87, 0.995, '@adnaaan433', fontsize=20, ha='right', va='center')
         
             himage = urlopen(f"https://images.fotmob.com/image_resources/logo/teamlogo/{ftmb_tid}.png")
             himage = Image.open(himage)
@@ -2921,7 +2921,7 @@ if league and htn and atn and st.session_state.confirmed:
         def generate_gk_dahsboard(pname, ftmb_tid):
             fig, axs = plt.subplots(1, 2, figsize=(16, 15), facecolor='#f5f5f5')
             
-            # Calculate minutos played
+            # Calculate minutes played
             mins_played = playing_time(pname)
             
             # Generate individual plots
@@ -2932,9 +2932,9 @@ if league and htn and atn and st.session_state.confirmed:
             
             # Add text and images to the figure
             fig.text(0.22, 0.98, f'{pname}', fontsize=40, fontweight='bold', ha='left', va='center')
-            fig.text(0.22, 0.94, f'in {hteamName} {hgoal_count} - {agoal_count} {ateamName}  |  minutos played: {mins_played}', 
+            fig.text(0.22, 0.94, f'in {hteamName} {hgoal_count} - {agoal_count} {ateamName}  |  Minutes played: {mins_played}', 
                      fontsize=25, ha='left', va='center')
-            fig.text(0.87, 0.995, '@Pehmsc', fontsize=15, ha='right', va='center')
+            fig.text(0.87, 0.995, '@adnaaan433', fontsize=15, ha='right', va='center')
         
             himage = urlopen(f"https://images.fotmob.com/image_resources/logo/teamlogo/{ftmb_tid}.png")
             himage = Image.open(himage)
@@ -3289,14 +3289,14 @@ if league and htn and atn and st.session_state.confirmed:
         if stats_type == "Key Stats":
             
             def key_stats(ax, phase_tag):
-                if phase_tag == 'Final do Jogo':
-                    ax.text(52.5, 14, 'Final do Jogo: 0-90min', fontsize=18, ha='center', va='center')
+                if phase_tag == 'Full Time':
+                    ax.text(52.5, 14, 'Full Time: 0-90min', fontsize=18, ha='center', va='center')
                     df_st = df.copy()
-                elif phase_tag == 'Primeira Parte':
-                    ax.text(52.5, 14, 'Primeira Parte: 0-45min', fontsize=18, ha='center', va='center')
+                elif phase_tag == 'First Half':
+                    ax.text(52.5, 14, 'First Half: 0-45min', fontsize=18, ha='center', va='center')
                     df_st = df[df['period']=='FirstHalf']
-                elif phase_tag == 'Segunda Parte':
-                    ax.text(52.5, 14, 'Segunda Parte: 45-90min', fontsize=18, ha='center', va='center')
+                elif phase_tag == 'Second Half':
+                    ax.text(52.5, 14, 'Second Half: 45-90min', fontsize=18, ha='center', va='center')
                     df_st = df[df['period']=='SecondHalf']
                     
                 #Possession%
@@ -3499,13 +3499,13 @@ if league and htn and atn and st.session_state.confirmed:
             
             fig,ax=plt.subplots(figsize=(24,16), facecolor=bg_color)
             
-            key_stats_time_phase = st.radio(" ", ['Final do Jogo', 'Primeira Parte', 'Segunda Parte'], index=0, key='key_stats_radio')
-            if key_stats_time_phase=='Final do Jogo':
-                key_stats(ax, 'Final do Jogo')
-            if key_stats_time_phase=='Primeira Parte':
-                key_stats(ax, 'Primeira Parte')
-            if key_stats_time_phase=='Segunda Parte':
-                key_stats(ax, 'Segunda Parte')
+            key_stats_time_phase = st.radio(" ", ['Full Time', 'First Half', 'Second Half'], index=0, key='key_stats_radio')
+            if key_stats_time_phase=='Full Time':
+                key_stats(ax, 'Full Time')
+            if key_stats_time_phase=='First Half':
+                key_stats(ax, 'First Half')
+            if key_stats_time_phase=='Second Half':
+                key_stats(ax, 'Second Half')
                 
             fig_text(0.5, 0.9, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=45, fontweight='bold', ha='center', va='center', ax=fig)
             fig.text(0.5, 0.85, 'Key Stats of the Match', fontsize=30, ha='center', va='center')
@@ -3524,14 +3524,14 @@ if league and htn and atn and st.session_state.confirmed:
         if stats_type == "Shooting Stats":
             
             def plot_shooting_stats(ax, phase_tag):
-                if phase_tag == 'Final do Jogo':
-                    ax.text(0, 16.5, 'Final do Jogo: 0-90min', fontsize=13, ha='center', va='center')
+                if phase_tag == 'Full Time':
+                    ax.text(0, 16.5, 'Full Time: 0-90min', fontsize=13, ha='center', va='center')
                     df_st = df.copy()
-                elif phase_tag == 'Primeira Parte':
-                    ax.text(0, 16.5, 'Primeira Parte: 0-45min', fontsize=13, ha='center', va='center')
+                elif phase_tag == 'First Half':
+                    ax.text(0, 16.5, 'First Half: 0-45min', fontsize=13, ha='center', va='center')
                     df_st = df[df['period']=='FirstHalf']
-                elif phase_tag == 'Segunda Parte':
-                    ax.text(0, 16.5, 'Segunda Parte: 45-90min', fontsize=13, ha='center', va='center')
+                elif phase_tag == 'Second Half':
+                    ax.text(0, 16.5, 'Second Half: 45-90min', fontsize=13, ha='center', va='center')
                     df_st = df[df['period']=='SecondHalf']
             
                 # df acc to time_phase
@@ -3662,13 +3662,13 @@ if league and htn and atn and st.session_state.confirmed:
             
             fig,ax=plt.subplots(figsize=(10,15), facecolor=bg_color)
             
-            shooting_stats_time_phase = st.radio(" ", ['Final do Jogo', 'Primeira Parte', 'Segunda Parte'], index=0, key='shooting_stats_radio')
-            if shooting_stats_time_phase=='Final do Jogo':
-                plot_shooting_stats(ax, 'Final do Jogo')
-            if shooting_stats_time_phase=='Primeira Parte':
-                plot_shooting_stats(ax, 'Primeira Parte')
-            if shooting_stats_time_phase=='Segunda Parte':
-                plot_shooting_stats(ax, 'Segunda Parte')
+            shooting_stats_time_phase = st.radio(" ", ['Full Time', 'First Half', 'Second Half'], index=0, key='shooting_stats_radio')
+            if shooting_stats_time_phase=='Full Time':
+                plot_shooting_stats(ax, 'Full Time')
+            if shooting_stats_time_phase=='First Half':
+                plot_shooting_stats(ax, 'First Half')
+            if shooting_stats_time_phase=='Second Half':
+                plot_shooting_stats(ax, 'Second Half')
                 
             fig_text(0.5, 0.98, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=23, fontweight='bold', ha='center', va='center', ax=fig)
             fig.text(0.5, 0.95, 'Shooting Stats of the Match', fontsize=18, ha='center', va='center')
@@ -3686,14 +3686,14 @@ if league and htn and atn and st.session_state.confirmed:
         if stats_type == "Passing Stats":
             
             def plot_passing_stats(ax, phase_tag):
-                if phase_tag == 'Final do Jogo':
-                    ax.text(0, 20, 'Final do Jogo: 0-90min', fontsize=13, ha='center', va='center')
+                if phase_tag == 'Full Time':
+                    ax.text(0, 20, 'Full Time: 0-90min', fontsize=13, ha='center', va='center')
                     df_st = df.copy()
-                elif phase_tag == 'Primeira Parte':
-                    ax.text(0, 20, 'Primeira Parte: 0-45min', fontsize=13, ha='center', va='center')
+                elif phase_tag == 'First Half':
+                    ax.text(0, 20, 'First Half: 0-45min', fontsize=13, ha='center', va='center')
                     df_st = df[df['period']=='FirstHalf']
-                elif phase_tag == 'Segunda Parte':
-                    ax.text(0, 20, 'Segunda Parte: 45-90min', fontsize=13, ha='center', va='center')
+                elif phase_tag == 'Second Half':
+                    ax.text(0, 20, 'Second Half: 45-90min', fontsize=13, ha='center', va='center')
                     df_st = df[df['period']=='SecondHalf']
             
             
@@ -3908,13 +3908,13 @@ if league and htn and atn and st.session_state.confirmed:
             
             fig,ax=plt.subplots(figsize=(10,18), facecolor=bg_color)
             
-            passing_stats_time_phase = st.radio(" ", ['Final do Jogo', 'Primeira Parte', 'Segunda Parte'], index=0, key='passing_stats_radio')
-            if passing_stats_time_phase=='Final do Jogo':
-                plot_passing_stats(ax, 'Final do Jogo')
-            if passing_stats_time_phase=='Primeira Parte':
-                plot_passing_stats(ax, 'Primeira Parte')
-            if passing_stats_time_phase=='Segunda Parte':
-                plot_passing_stats(ax, 'Segunda Parte')
+            passing_stats_time_phase = st.radio(" ", ['Full Time', 'First Half', 'Second Half'], index=0, key='passing_stats_radio')
+            if passing_stats_time_phase=='Full Time':
+                plot_passing_stats(ax, 'Full Time')
+            if passing_stats_time_phase=='First Half':
+                plot_passing_stats(ax, 'First Half')
+            if passing_stats_time_phase=='Second Half':
+                plot_passing_stats(ax, 'Second Half')
                 
             fig_text(0.5, 0.98, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=23, fontweight='bold', ha='center', va='center', ax=fig)
             fig.text(0.5, 0.95, 'Passing Stats of the Match', fontsize=18, ha='center', va='center')
@@ -3932,14 +3932,14 @@ if league and htn and atn and st.session_state.confirmed:
         if stats_type == "Defensive Stats":
             
             def plot_defending_stats(ax, phase_tag):
-                if phase_tag == 'Final do Jogo':
-                    ax.text(0, 12.5, 'Final do Jogo: 0-90min', fontsize=13, ha='center', va='center')
+                if phase_tag == 'Full Time':
+                    ax.text(0, 12.5, 'Full Time: 0-90min', fontsize=13, ha='center', va='center')
                     df_st = df.copy()
-                elif phase_tag == 'Primeira Parte':
-                    ax.text(0, 12.5, 'Primeira Parte: 0-45min', fontsize=13, ha='center', va='center')
+                elif phase_tag == 'First Half':
+                    ax.text(0, 12.5, 'First Half: 0-45min', fontsize=13, ha='center', va='center')
                     df_st = df[df['period']=='FirstHalf']
-                elif phase_tag == 'Segunda Parte':
-                    ax.text(0, 12.5, 'Segunda Parte: 45-90min', fontsize=13, ha='center', va='center')
+                elif phase_tag == 'Second Half':
+                    ax.text(0, 12.5, 'Second Half: 45-90min', fontsize=13, ha='center', va='center')
                     df_st = df[df['period']=='SecondHalf']
             
                 # setting dfs
@@ -4104,13 +4104,13 @@ if league and htn and atn and st.session_state.confirmed:
             
             fig,ax=plt.subplots(figsize=(10,11), facecolor=bg_color)
             
-            defending_stats_time_phase = st.radio(" ", ['Final do Jogo', 'Primeira Parte', 'Segunda Parte'], index=0, key='defending_stats_radio')
-            if defending_stats_time_phase=='Final do Jogo':
-                plot_defending_stats(ax, 'Final do Jogo')
-            if defending_stats_time_phase=='Primeira Parte':
-                plot_defending_stats(ax, 'Primeira Parte')
-            if defending_stats_time_phase=='Segunda Parte':
-                plot_defending_stats(ax, 'Segunda Parte')
+            defending_stats_time_phase = st.radio(" ", ['Full Time', 'First Half', 'Second Half'], index=0, key='defending_stats_radio')
+            if defending_stats_time_phase=='Full Time':
+                plot_defending_stats(ax, 'Full Time')
+            if defending_stats_time_phase=='First Half':
+                plot_defending_stats(ax, 'First Half')
+            if defending_stats_time_phase=='Second Half':
+                plot_defending_stats(ax, 'Second Half')
                 
             fig_text(0.5, 1.01, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=23, fontweight='bold', ha='center', va='center', ax=fig)
             fig.text(0.5, 0.97, 'Defensive Stats of the Match', fontsize=18, ha='center', va='center')
@@ -4128,14 +4128,14 @@ if league and htn and atn and st.session_state.confirmed:
         if stats_type == "Other Stats":
             
             def plot_other_stats(ax, phase_tag):
-                if phase_tag == 'Final do Jogo':
-                    ax.text(0, 8, 'Final do Jogo: 0-90min', fontsize=13, ha='center', va='center')
+                if phase_tag == 'Full Time':
+                    ax.text(0, 8, 'Full Time: 0-90min', fontsize=13, ha='center', va='center')
                     df_st = df.copy()
-                elif phase_tag == 'Primeira Parte':
-                    ax.text(0, 8, 'Primeira Parte: 0-45min', fontsize=13, ha='center', va='center')
+                elif phase_tag == 'First Half':
+                    ax.text(0, 8, 'First Half: 0-45min', fontsize=13, ha='center', va='center')
                     df_st = df[df['period']=='FirstHalf']
-                elif phase_tag == 'Segunda Parte':
-                    ax.text(0, 8, 'Segunda Parte: 45-90min', fontsize=13, ha='center', va='center')
+                elif phase_tag == 'Second Half':
+                    ax.text(0, 8, 'Second Half: 45-90min', fontsize=13, ha='center', va='center')
                     df_st = df[df['period']=='SecondHalf']
             
                 # dfs
@@ -4227,13 +4227,13 @@ if league and htn and atn and st.session_state.confirmed:
             
             fig,ax=plt.subplots(figsize=(10,11), facecolor=bg_color)
             
-            other_stats_time_phase = st.radio(" ", ['Final do Jogo', 'Primeira Parte', 'Segunda Parte'], index=0, key='other_stats_radio')
-            if other_stats_time_phase=='Final do Jogo':
-                plot_other_stats(ax, 'Final do Jogo')
-            if other_stats_time_phase=='Primeira Parte':
-                plot_other_stats(ax, 'Primeira Parte')
-            if other_stats_time_phase=='Segunda Parte':
-                plot_other_stats(ax, 'Segunda Parte')
+            other_stats_time_phase = st.radio(" ", ['Full Time', 'First Half', 'Second Half'], index=0, key='other_stats_radio')
+            if other_stats_time_phase=='Full Time':
+                plot_other_stats(ax, 'Full Time')
+            if other_stats_time_phase=='First Half':
+                plot_other_stats(ax, 'First Half')
+            if other_stats_time_phase=='Second Half':
+                plot_other_stats(ax, 'Second Half')
                 
             fig_text(0.5, 1.02, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=23, fontweight='bold', ha='center', va='center', ax=fig)
             fig.text(0.5, 0.98, 'Other Stats of the Match', fontsize=18, ha='center', va='center')
@@ -4549,7 +4549,7 @@ if league and htn and atn and st.session_state.confirmed:
                 
                 fig.text(0.35, 1.02, 'Top Ball Progressors', fontsize=75, fontweight='bold', ha='center', va='center')
                 fig.text(0.35, 0.97, f'in the match {hteamName} {hgoal_count} - {agoal_count} {ateamName}', color='#1a1a1a', fontsize=50, ha='center', va='center')  
-                fig.text(0.35, 0.94, '@Pehmsc', fontsize=25, ha='center', va='center')
+                fig.text(0.35, 0.94, '@adnaaan433', fontsize=25, ha='center', va='center')
                 
                 st.pyplot(fig)
                 
@@ -4559,7 +4559,7 @@ if league and htn and atn and st.session_state.confirmed:
                 
                 fig.text(0.35, 1.02, 'Top Shot Sequence Involvements', fontsize=75, fontweight='bold', ha='center', va='center')
                 fig.text(0.35, 0.97, f'in the match {hteamName} {hgoal_count} - {agoal_count} {ateamName}', color='#1a1a1a', fontsize=50, ha='center', va='center')
-                fig.text(0.35, 0.94, '@Pehmsc', fontsize=25, ha='center', va='center')
+                fig.text(0.35, 0.94, '@adnaaan433', fontsize=25, ha='center', va='center')
                 
                 st.pyplot(fig)
                 
@@ -4569,7 +4569,7 @@ if league and htn and atn and st.session_state.confirmed:
                 
                 fig.text(0.35, 1.02, 'Top Defensive Involvements', fontsize=75, fontweight='bold', ha='center', va='center')
                 fig.text(0.35, 0.97, f'in the match {hteamName} {hgoal_count} - {agoal_count} {ateamName}', color='#1a1a1a', fontsize=50, ha='center', va='center') 
-                fig.text(0.35, 0.94, '@Pehmsc', fontsize=25, ha='center', va='center')
+                fig.text(0.35, 0.94, '@adnaaan433', fontsize=25, ha='center', va='center')
                 
                 st.pyplot(fig)
                 
@@ -4579,7 +4579,7 @@ if league and htn and atn and st.session_state.confirmed:
                 
                 fig.text(0.35, 1.02, 'Top Threat Creating Players', fontsize=75, fontweight='bold', ha='center', va='center')
                 fig.text(0.35, 0.97, f'in the match {hteamName} {hgoal_count} - {agoal_count} {ateamName}', color='#1a1a1a', fontsize=50, ha='center', va='center')
-                fig.text(0.35, 0.94, '@Pehmsc', fontsize=25, ha='center', va='center')
+                fig.text(0.35, 0.94, '@adnaaan433', fontsize=25, ha='center', va='center')
                 
                 st.pyplot(fig)
             
