@@ -1,4 +1,4 @@
-# Import Packages
+c# Import Packages
 import json
 import re
 import pandas as pd
@@ -36,7 +36,7 @@ col2 = '#00a0de'
 
 st.sidebar.title('Match Selection')
 st.title('Post Match Report')
-st.text('Data from: Opta,   Made by: Adnan,   twitter: @adnaaan433')
+st.text('Data from: Opta,   Made by: Pehmsc,   twitter: @Pehmsc')
 st.divider()
     
 league = None
@@ -53,19 +53,17 @@ def reset_confirmed():
     
     
 # Step 1: League selection
-league = st.sidebar.selectbox('Select a League', ['LaLiga 2024-25', 'Premier League 2024-25', 'UEFA Champions League 2024-25'], key='league', index=None, on_change=reset_confirmed)
+league = st.sidebar.selectbox('Select a League', ['Liga Portugal 2024-25', 'UEFA Champions League 2024-25'], key='league', index=None, on_change=reset_confirmed)
 
 # Step 3: Team selection
-if league == 'LaLiga 2024-25':
-    team_list = ['Athletic Club', 'Atletico Madrid', 'Barcelona', 'Celta Vigo', 'Deportivo Alaves', 'Espanyol', 'Getafe', 'Girona', 'Las Palmas', 'Leganes', 'Mallorca', 'Osasuna', 'Rayo Vallecano', 'Real Betis', 
-                 'Real Madrid', 'Real Sociedad', 'Real Valladolid', 'Sevilla', 'Valencia', 'Villarreal']
-elif league == 'Premier League 2024-25':
-    team_list = ['Arsenal', 'Aston Villa', 'Bournemouth', 'Brentford', 'Brighton', 'Chelsea', 'Crystal Palace', 'Everton', 'Fulham', 'Ipswich', 'Leicester', 'Liverpool', 'Manchester City', 'Manchester United', 'Newcastle',
-                 'Nottingham Forest', 'Southampton', 'Tottenham', 'West Ham', 'Wolves']
+if league == 'Liga Portugal 2024-25':
+    team_list = ['Arouca', 'AVS Futebol SAD', 'Benfica', 'Boavista', 'Braga', 'Casa Pia AC', 'Estoril', 'Estrela da Amadora', 'Famalicao', 'Farense', 'FC Porto', 'Gil Vicente', 'Moreirense', 'Nacional', 
+                 'Rio Ave', 'Santa Clara', 'Sporting CP', 'Vitoria de Guimaraes']
+#elif league == 'Premier League 2024-25':
+    #team_list = ['Arsenal', 'Aston Villa', 'Bournemouth', 'Brentford', 'Brighton', 'Chelsea', 'Crystal Palace', 'Everton', 'Fulham', 'Ipswich', 'Leicester', 'Liverpool', 'Manchester City', 'Manchester United', 'Newcastle',
+                #'Nottingham Forest', 'Southampton', 'Tottenham', 'West Ham', 'Wolves']
 elif league == 'UEFA Champions League 2024-25':
-    team_list = ['AC Milan', 'Arsenal', 'Aston Villa', 'Atalanta', 'Atletico Madrid', 'BSC Young Boys', 'Barcelona', 'Bayer Leverkusen', 'Bayern Munich', 'Benfica', 'Bologna', 'Borussia Dortmund', 'Brest', 'Celtic',
-                 'Club Bruges', 'Dinamo Zagreb', 'FK Crvena Zvezda', 'Feyenoord', 'Girona', 'Inter', 'Juventus', 'Lille', 'Liverpool', 'Manchester City', 'Monaco', 'PSV Eindhoven', 'Paris Saint-Germain', 'RB Leipzig',
-                 'Real Madrid', 'Salzburg', 'Shakhtar Donetsk', 'Slovan Bratislava', 'Sparta Prague', 'Sporting CP', 'Sturm Graz', 'VfB Stuttgart']
+    team_list = ['Benfica','Sporting CP']
 
 if league and league != 'UEFA Champions League 2024-25':
     htn = st.sidebar.selectbox('Select Home Team', team_list, key='home_team', index=None, on_change=reset_confirmed)
@@ -84,7 +82,7 @@ elif league == 'UEFA Champions League 2024-25':
             atn = st.sidebar.selectbox('Select Away Team Name', atn_options, key='away_team', index=None, on_change=reset_confirmed)
 
 if league and league != 'UEFA Champions League 2024-25' and htn and atn:
-    match_html_path = f"https://raw.githubusercontent.com/adnaaan433/git_d4t4_p/refs/heads/main/{league}/{htn}_vs_{atn}.html"
+    match_html_path = f"https://raw.githubusercontent.com/pehmsc/PF_Data/refs/heads/main/{league}/{htn}_vs_{atn}.html"
     match_html_path = match_html_path.replace(' ', '%20')
     try:
         response = requests.get(match_html_path)
@@ -96,7 +94,7 @@ if league and league != 'UEFA Champions League 2024-25' and htn and atn:
         st.sidebar.write('Match not found')
         
 elif league and league == 'UEFA Champions League 2024-25' and stage and htn and atn:
-    match_html_path = f"https://raw.githubusercontent.com/adnaaan433/UEFA_Competion/refs/heads/main/{league}/{stage}/{htn}_vs_{atn}.html"
+    match_html_path = f"https://raw.githubusercontent.com/pehmsc/PF_Data/refs/heads/main/{league}/{stage}/{htn}_vs_{atn}.html"
     match_html_path = match_html_path.replace(' ', '%20')
     try:
         response = requests.get(match_html_path)
@@ -311,7 +309,7 @@ if league and htn and atn and st.session_state.confirmed:
         
         
         # xT = pd.read_csv('https://raw.githubusercontent.com/mckayjohns/youtube-videos/main/data/xT_Grid.csv', header=None)
-        xT = pd.read_csv("https://raw.githubusercontent.com/adnaaan433/Post-Match-Report-2.0/refs/heads/main/xT_Grid.csv", header=None)
+        xT = pd.read_csv("https://raw.githubusercontent.com/pehmsc/PF_Data/refs/heads/main/xT_Grid.csv", header=None)
         xT = np.array(xT)
         xT_rows, xT_cols = xT.shape
         
