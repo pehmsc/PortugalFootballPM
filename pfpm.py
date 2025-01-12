@@ -34,9 +34,9 @@ line_color= '#000000'
 col1 = '#ff4b44'
 col2 = '#00a0de'
 
-st.sidebar.title('Match Selection')
-st.title('Post Match Report')
-st.text('Data from: Opta,   Made by: Pehmsc,   twitter: @Pehmsc')
+st.sidebar.title('Selecione a Partida')
+st.title('Relatório Pós-Jogo')
+st.text('Fonte: Opta,   Made by: Pehmsc,   Twitter: @Pehmsc')
 st.divider()
     
 league = None
@@ -53,7 +53,7 @@ def reset_confirmed():
     
     
 # Step 1: League selection
-league = st.sidebar.selectbox('Select a League', ['Liga Portugal 2024-25', 'UEFA Champions League 2024-25'], key='league', index=None, on_change=reset_confirmed)
+league = st.sidebar.selectbox('Selecione a Competição', ['Liga Portugal 2024-25', 'UEFA Champions League 2024-25'], key='league', index=None, on_change=reset_confirmed)
 
 # Step 3: Team selection
 if league == 'Liga Portugal 2024-25':
@@ -66,20 +66,20 @@ elif league == 'UEFA Champions League 2024-25':
     team_list = ['Benfica','Sporting CP']
 
 if league and league != 'UEFA Champions League 2024-25':
-    htn = st.sidebar.selectbox('Select Home Team', team_list, key='home_team', index=None, on_change=reset_confirmed)
+    htn = st.sidebar.selectbox('Selecione Equipa da Casa', team_list, key='home_team', index=None, on_change=reset_confirmed)
     
     if htn:
         atn_options = [team for team in team_list if team != htn]
-        atn = st.sidebar.selectbox('Select Away Team Name', atn_options, key='away_team', index=None, on_change=reset_confirmed)
+        atn = st.sidebar.selectbox('Selecione Equipa Visitante', atn_options, key='away_team', index=None, on_change=reset_confirmed)
         
 elif league == 'UEFA Champions League 2024-25':
-    stage = st.sidebar.selectbox('Select Stage', ['League Phase', 'Knockout Playoff', 'Round of 16', 'Quarter Final', 'Quarter Final', 'Final'], key='stage_selection', index=None, on_change=reset_confirmed)
+    stage = st.sidebar.selectbox('Selecione a Fase', ['Fase de Grupo', 'Playoff', 'Oitavos de Final', 'Quartos de Final', 'Meia Final', 'Final'], key='stage_selection', index=None, on_change=reset_confirmed)
     if stage:
-        htn = st.sidebar.selectbox('Select Home Team', team_list, key='home_team', index=None, on_change=reset_confirmed)
+        htn = st.sidebar.selectbox('Selecione Equipe da Casa', team_list, key='home_team', index=None, on_change=reset_confirmed)
         
         if htn:
             atn_options = [team for team in team_list if team != htn]
-            atn = st.sidebar.selectbox('Select Away Team Name', atn_options, key='away_team', index=None, on_change=reset_confirmed)
+            atn = st.sidebar.selectbox('Selecione Equipa Visitante', atn_options, key='away_team', index=None, on_change=reset_confirmed)
 
 if league and league != 'UEFA Champions League 2024-25' and htn and atn:
     match_html_path = f"https://raw.githubusercontent.com/pehmsc/PF_Data/refs/heads/main/{league}/{htn}_vs_{atn}.html"
@@ -88,10 +88,10 @@ if league and league != 'UEFA Champions League 2024-25' and htn and atn:
         response = requests.get(match_html_path)
         response.raise_for_status()  # Raise an error for invalid responses (e.g., 404, 500)
         # Only show the button if the response is successful
-        match_input = st.sidebar.button('Confirm Selections', on_click=lambda: st.session_state.update({'confirmed': True}))
+        match_input = st.sidebar.button('Confirmar Seleceção', on_click=lambda: st.session_state.update({'confirmed': True}))
     except:
         st.session_state['confirmed'] = False
-        st.sidebar.write('Match not found')
+        st.sidebar.write('Partida não encontrada')
         
 elif league and league == 'UEFA Champions League 2024-25' and stage and htn and atn:
     match_html_path = f"https://raw.githubusercontent.com/pehmsc/PF_Data/refs/heads/main/{league}/{stage}/{htn}_vs_{atn}.html"
@@ -103,7 +103,7 @@ elif league and league == 'UEFA Champions League 2024-25' and stage and htn and 
         match_input = st.sidebar.button('Confirm Selections', on_click=lambda: st.session_state.update({'confirmed': True}))
     except:
         st.session_state['confirmed'] = False
-        st.sidebar.write('Match not found')
+        st.sidebar.write('Partida não encontrada')
     
 if league and htn and atn and st.session_state.confirmed:
     @st.cache_data
@@ -496,13 +496,13 @@ if league and htn and atn and st.session_state.confirmed:
     st.header(f'{hteamName} {hgoal_count} - {agoal_count} {ateamName}')
     st.text(f'{league}')
     
-    tab1, tab2, tab3, tab4 = st.tabs(['Team Analysis', 'Player Analysis', 'Match Statistics', 'Top Players'])
+    tab1, tab2, tab3, tab4 = st.tabs(['Análise da Equipa', 'Análise do Jogador', 'Estatísticas do Jogo', 'Melhores Jogadores'])
     
     with tab1:
-        an_tp = st.selectbox('Team Analysis Type:', ['Passing Network', 'Defensive Actions Heatmap', 'Progressive Passes', 'Progressive Carries', 'Shotmap', 'GK Saves', 'Match Momentum',
-                             'Zone14 & Half-Space Passes', 'Final Third Entries', 'Box Entries', 'High-Turnovers', 'Chances Creating Zones', 'Crosses', 'Team Domination Zones', 'Pass Target Zones'], index=0, key='analysis_type')
+        an_tp = st.selectbox('Análise da Equipa Tipo:', ['Rede de Passes', 'Mapa de Calor das Acções Defensivas', 'Passes Progressivos', 'Transporte Progressivo', 'Mapa de Remates', 'GR Defesas', 'Impulso do Jogo',
+                             'Entrada da Área e Passes Entre Linhas', 'Entradas Último Terço', 'Entradas na Área', 'High-Turnovers', 'Chances Creating Zones', 'Crosses', 'Team Domination Zones', 'Pass Target Zones'], index=0, key='analysis_type')
         # if st.session_state.analysis_type:
-        if an_tp == 'Passing Network':
+        if an_tp == 'Rede de Passes':
             # st.header(f'{st.session_state.analysis_type}')
             st.header(f'{an_tp}')
             def pass_network(ax, team_name, col, phase_tag):
@@ -641,7 +641,7 @@ if league and htn and atn and st.session_state.confirmed:
                 away_pass_btn = pass_network(axs[1], ateamName, acol, 'Second Half')
                 
             fig_text(0.5, 1.05, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=30, fontweight='bold', ha='center', va='center', ax=fig)
-            fig.text(0.5, 1.01, 'Passing Network', fontsize=20, ha='center', va='center')
+            fig.text(0.5, 1.01, 'Rede de Passes', fontsize=20, ha='center', va='center')
             fig.text(0.5, 0.97, '@adnaaan433', fontsize=10, ha='center', va='center')
             
             fig.text(0.5, 0.05, '*Circles = Starter Players, Box = Substituted On Players, Numbers inside = Jersey Numbers of the Players', fontsize=10, fontstyle='italic', ha='center', va='center')
@@ -665,7 +665,7 @@ if league and htn and atn and st.session_state.confirmed:
                 st.write(f'{ateamName} Passing Pairs:')
                 st.dataframe(away_pass_btn, hide_index=True)
             
-        if an_tp == 'Defensive Actions Heatmap':
+        if an_tp == 'Mapa de Calor das Acções Defensivas':
             # st.header(f'{st.session_state.analysis_type}')
             st.header(f'{an_tp}')
             
@@ -796,7 +796,7 @@ if league and htn and atn and st.session_state.confirmed:
                 away_df_def = def_acts_hm(axs[1], ateamName, acol, 'Second Half')
                 
             fig_text(0.5, 1.05, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=30, fontweight='bold', ha='center', va='center', ax=fig)
-            fig.text(0.5, 1.01, 'Defensive Actions Heatmap', fontsize=20, ha='center', va='center')
+            fig.text(0.5, 1.01, 'Mapa de Calor das Acções Defensivas', fontsize=20, ha='center', va='center')
             fig.text(0.5, 0.97, '@adnaaan433', fontsize=10, ha='center', va='center')
             
             fig.text(0.5, 0.05, '*Circles = Starter Players, Box = Substituted On Players, Numbers inside = Jersey Numbers of the Players', fontsize=10, fontstyle='italic', ha='center', va='center')
@@ -820,7 +820,7 @@ if league and htn and atn and st.session_state.confirmed:
                 st.write(f'{ateamName} Players Defensive Actions:')
                 st.dataframe(away_df_def, hide_index=True)
             
-        if an_tp == 'Progressive Passes':
+        if an_tp == 'Passes Progressivos':
             # st.header(f'{st.session_state.analysis_type}')
             st.header(f'{an_tp}')
             
@@ -898,7 +898,7 @@ if league and htn and atn and st.session_state.confirmed:
                     ax.text(34, 116, 'First Half: 0-45 minutes', color=col, fontsize=13, ha='center', va='center')
                 elif phase_tag == 'Second Half':
                     ax.text(34, 116, 'Second Half: 45-90 minutes', color=col, fontsize=13, ha='center', va='center')
-                ax.text(34, 112, f'Open-Play Progressive Passes: {len(df_prop)}', color=col, fontsize=13, ha='center', va='center')
+                ax.text(34, 112, f'Open-Play Passes Progressivos: {len(df_prop)}', color=col, fontsize=13, ha='center', va='center')
                 ax.text(34, 108, f'Most by: {most_name}({most_count})', color=col, fontsize=13, ha='center', va='center')
             
                 ax.vlines(136/3, ymin=0, ymax=105, color='gray', ls='dashed', lw=2)
@@ -931,10 +931,10 @@ if league and htn and atn and st.session_state.confirmed:
                 away_prop = progressive_pass(axs[1], ateamName, acol, 'Second Half')
                 
             fig_text(0.5, 1.05, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=30, fontweight='bold', ha='center', va='center', ax=fig)
-            fig.text(0.5, 1.01, 'Progressive Passes', fontsize=20, ha='center', va='center')
+            fig.text(0.5, 1.01, 'Passes Progressivos', fontsize=20, ha='center', va='center')
             fig.text(0.5, 0.97, '@adnaaan433', fontsize=10, ha='center', va='center')
             
-            fig.text(0.5, 0.02, '*Progressive Passes : Open-Play Successful Passes that move the ball at least 10 yards towards the Opponent Goal Center', fontsize=10, fontstyle='italic', ha='center', va='center')
+            fig.text(0.5, 0.02, '*Passes Progressivos : Open-Play Successful Passes that move the ball at least 10 yards towards the Opponent Goal Center', fontsize=10, fontstyle='italic', ha='center', va='center')
             fig.text(0.5, 0.00, '*Excluding the passes started from Own Defensive Third of the Pitch', fontsize=10, fontstyle='italic', ha='center', va='center')
             
             himage = urlopen(f"https://images.fotmob.com/image_resources/logo/teamlogo/{hftmb_tid}.png")
@@ -955,7 +955,7 @@ if league and htn and atn and st.session_state.confirmed:
                 st.write(f'{ateamName} Progressive Passers:')
                 st.dataframe(away_prop, hide_index=True)
             
-        if an_tp == 'Progressive Carries':
+        if an_tp == 'Transporte Progressivo':
             # st.header(f'{st.session_state.analysis_type}')
             st.header(f'{an_tp}')
             def progressive_carry(ax, team_name, col, phase_tag):
@@ -1034,7 +1034,7 @@ if league and htn and atn and st.session_state.confirmed:
                     ax.text(34, 116, 'First Half: 0-45 minutes', color=col, fontsize=13, ha='center', va='center')
                 elif phase_tag == 'Second Half':
                     ax.text(34, 116, 'Second Half: 45-90 minutes', color=col, fontsize=13, ha='center', va='center')
-                ax.text(34, 112, f'Progressive Carries: {len(df_proc)}', color=col, fontsize=13, ha='center', va='center')
+                ax.text(34, 112, f'Transporte Progressivo: {len(df_proc)}', color=col, fontsize=13, ha='center', va='center')
                 ax.text(34, 108, f'Most by: {most_name}({most_count})', color=col, fontsize=13, ha='center', va='center')
             
                 ax.vlines(136/3, ymin=0, ymax=105, color='gray', ls='dashed', lw=2)
@@ -1067,7 +1067,7 @@ if league and htn and atn and st.session_state.confirmed:
                 away_proc = progressive_carry(axs[1], ateamName, acol, 'Second Half')
             
             fig_text(0.5, 1.05, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=30, fontweight='bold', ha='center', va='center', ax=fig)
-            fig.text(0.5, 1.01, 'Progressive Passes', fontsize=20, ha='center', va='center')
+            fig.text(0.5, 1.01, 'Passes Progressivos', fontsize=20, ha='center', va='center')
             fig.text(0.5, 0.97, '@adnaaan433', fontsize=10, ha='center', va='center')
             
             fig.text(0.5, 0.02, '*Progressive Carry : Carries that move the ball at least 10 yards towards the Opponent Goal Center', fontsize=10, fontstyle='italic', ha='center', va='center')
@@ -1091,7 +1091,7 @@ if league and htn and atn and st.session_state.confirmed:
                 st.write(f'{ateamName} Progressive Carriers:')
                 st.dataframe(away_proc, hide_index=True)
             
-        if an_tp == 'Shotmap':
+        if an_tp == 'Mapa de Remates':
             # st.header(f'{st.session_state.analysis_type}')
             st.header(f'{an_tp}')
             def plot_ShotsMap(ax, team_name, col, phase_tag):
@@ -1237,7 +1237,7 @@ if league and htn and atn and st.session_state.confirmed:
                 st.write(f'{ateamName} Top Shot takers:')
                 st.dataframe(away_shots_stats, hide_index=True)
             
-        if an_tp == 'GK Saves':
+        if an_tp == 'GR Defesas':
             # st.header(f'{st.session_state.analysis_type}')
             st.header(f'{an_tp}')
             
@@ -1300,7 +1300,7 @@ if league and htn and atn and st.session_state.confirmed:
                 elif phase_tag == 'Second Half':
                     ax.text(52.5, 80, 'Second Half: 45-90 minutes', color=col, fontsize=13, ha='center', va='center')
                     
-                ax.text(52.5, 73, f'{team_name} GK Saves', color=col, fontsize=15, fontweight='bold', ha='center', va='center')
+                ax.text(52.5, 73, f'{team_name} GR Defesas', color=col, fontsize=15, fontweight='bold', ha='center', va='center')
             
                 ax.text(52.5, 28-(5*0), f'Total Shots faced: {len(shots_df)}', fontsize=13, ha='center', va='center')
                 ax.text(52.5, 28-(5*1), f'Shots On Target faced: {len(hSavedf)+len(hSavedf_bc)+len(hGoaldf)+len(hGoaldf_bc)}', fontsize=13, ha='center', va='center')
@@ -1343,7 +1343,7 @@ if league and htn and atn and st.session_state.confirmed:
             
             st.pyplot(fig)
             
-        if an_tp == 'Match Momentum':
+        if an_tp == 'Impulso do Jogo':
             # st.header(f'{st.session_state.analysis_type}')
             st.header(f'{an_tp}')
             
@@ -1423,7 +1423,7 @@ if league and htn and atn and st.session_state.confirmed:
             fig.subplots_adjust(wspace=0.025)
             
             fig_text(0.5, 1.1, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=40, fontweight='bold', ha='center', va='center', ax=fig)
-            fig.text(0.5, 1.04, 'Match Momentum', fontsize=30, ha='center', va='center')
+            fig.text(0.5, 1.04, 'Impulso do Jogo', fontsize=30, ha='center', va='center')
             fig.text(0.5, 0.98, '@adnaaan433', fontsize=15, ha='center', va='center')
             
             fig.text(0.5, -0.01, '*Momentum is the measure of the Avg. Open-Play Attacking Threat of a team per minute', fontsize=15, fontstyle='italic', ha='center', va='center')
@@ -1526,7 +1526,7 @@ if league and htn and atn and st.session_state.confirmed:
             
             st.pyplot(fig)
             
-        if an_tp == 'Zone14 & Half-Space Passes':
+        if an_tp == 'Entrada da Área e Passes Entre Linhas':
             # st.header(f'{st.session_state.analysis_type}')
             st.header('Passes Into Zone14 & Half-Spaces')
             
@@ -1734,7 +1734,7 @@ if league and htn and atn and st.session_state.confirmed:
                 st.write(f'{ateamName} Passers from Zone14 & Half-Spaces:')
                 st.dataframe(away_z14hsf_stats)
             
-        if an_tp == 'Final Third Entries':
+        if an_tp == 'Entradas Último Terço':
             # st.header(f'{st.session_state.analysis_type}')
             st.header(f'{an_tp}')
             
@@ -1803,7 +1803,7 @@ if league and htn and atn and st.session_state.confirmed:
                 away_fthirdE_stats = final_third_entry(axs[1], ateamName, acol, 'Second Half')
             
             fig_text(0.5, 1.05, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=30, fontweight='bold', ha='center', va='center', ax=fig)
-            fig.text(0.5, 1.01, 'Final Third Entries', fontsize=20, ha='center', va='center')
+            fig.text(0.5, 1.01, 'Entradas Último Terço', fontsize=20, ha='center', va='center')
             fig.text(0.5, 0.97, '@adnaaan433', fontsize=10, ha='center', va='center')
             
             fig.text(0.5, 0.05, '*Open-Play Successful Passes & Carries which ended inside the Final third, starting from outside the Final third', fontsize=10, 
@@ -1821,13 +1821,13 @@ if league and htn and atn and st.session_state.confirmed:
             
             col1, col2 = st.columns(2)
             with col1:
-                st.write(f'{hteamName} Players Final Third Entries:')
+                st.write(f'{hteamName} Players Entradas Último Terço:')
                 st.dataframe(home_fthirdE_stats)
             with col2:
-                st.write(f'{ateamName} Players Final Third Entries:')
+                st.write(f'{ateamName} Players Entradas Último Terço:')
                 st.dataframe(away_fthirdE_stats)
             
-        if an_tp == 'Box Entries':
+        if an_tp == 'Entradas na Área':
             # st.header(f'{st.session_state.analysis_type}')
             st.header(f'{an_tp}')
             
@@ -1900,7 +1900,7 @@ if league and htn and atn and st.session_state.confirmed:
                 away_boxE_stats = penalty_box_entry(axs[1], ateamName, acol, 'Second Half')
             
             fig_text(0.5, 1.08, f'<{hteamName} {hgoal_count}> - <{agoal_count} {ateamName}>', highlight_textprops=[{'color':hcol}, {'color':acol}], fontsize=30, fontweight='bold', ha='center', va='center', ax=fig)
-            fig.text(0.5, 1.01, "Opponent's Penalty Box Entries", fontsize=20, ha='center', va='center')
+            fig.text(0.5, 1.01, "Opponent's Penalty Entradas na Área", fontsize=20, ha='center', va='center')
             fig.text(0.5, 0.96, '@adnaaan433', fontsize=10, ha='center', va='center')
             
             fig.text(0.5, 0.00, '*Open-Play Successful Passes & Carries which ended inside the Opponent Penalty Box, starting from outside the Penalty Box', fontsize=10, 
@@ -1918,10 +1918,10 @@ if league and htn and atn and st.session_state.confirmed:
             
             col1, col2 = st.columns(2)
             with col1:
-                st.write(f'{hteamName} Players Penalty Box Entries:')
+                st.write(f'{hteamName} Players Penalty Entradas na Área:')
                 st.dataframe(home_boxE_stats)
             with col2:
-                st.write(f'{ateamName} Players Penalty Box Entries:')
+                st.write(f'{ateamName} Players Penalty Entradas na Área:')
                 st.dataframe(away_boxE_stats)
             
         if an_tp == 'High-Turnovers':
@@ -3111,7 +3111,7 @@ if league and htn and atn and st.session_state.confirmed:
                 
             passing_stats_dict = {
                 'Accurate Passes': f'{len(accpass)}/{len(passdf)} ({pass_accuracy}%)',
-                'Progressive Passes': len(pro_pass),
+                'Passes Progressivos': len(pro_pass),
                 'Chances Created': len(cc),
                 'Big Chances Created': len(bcc),
                 'Assists': len(ass), 
@@ -3132,7 +3132,7 @@ if league and htn and atn and st.session_state.confirmed:
         
             carry_stats_dict = {
                 'Total Carries': len(carrydf),
-                'Progressive Carries': len(pro_carry),
+                'Transporte Progressivo': len(pro_carry),
                 'Carries Led to Shot': len(led_shot),
                 'Carries Let to Goal': len(led_goal),
                 'Carries into Final Third': len(fth_carry),
@@ -3153,7 +3153,7 @@ if league and htn and atn and st.session_state.confirmed:
                 'Assists Received': len(as_rec),
                 'Passes Received in Final 1/3': len(fthd_rec),
                 'Passes Received in Penalty Box': len(pen_rec),
-                'Progressive Passes Received': len(pro_rec),
+                'Passes Progressivos Received': len(pro_rec),
                 'Crosses Received': len(crs_rec),
                 'Longball Received': len(long_rec),
                 'xT Received': xT_rec,
@@ -4258,15 +4258,15 @@ if league and htn and atn and st.session_state.confirmed:
                 
                 # Top Ball Progressor
                 # Initialize an empty dictionary to store home players different type of pass counts
-                progressor_counts = {'name': unique_players, 'Progressive Passes': [], 'Progressive Carries': [], 'team names': []}
+                progressor_counts = {'name': unique_players, 'Passes Progressivos': [], 'Transporte Progressivo': [], 'team names': []}
                 for name in unique_players:
                     dfp = df[(df['name']==name) & (df['outcomeType']=='Successful')]
-                    progressor_counts['Progressive Passes'].append(len(dfp[(dfp['prog_pass'] >= 9.144) & (dfp['x']>=35) & (~dfp['qualifiers'].str.contains('CornerTaken|Freekick'))]))
-                    progressor_counts['Progressive Carries'].append(len(dfp[(dfp['prog_carry'] >= 9.144) & (dfp['endX']>=35)]))
+                    progressor_counts['Passes Progressivos'].append(len(dfp[(dfp['prog_pass'] >= 9.144) & (dfp['x']>=35) & (~dfp['qualifiers'].str.contains('CornerTaken|Freekick'))]))
+                    progressor_counts['Transporte Progressivo'].append(len(dfp[(dfp['prog_carry'] >= 9.144) & (dfp['endX']>=35)]))
                     progressor_counts['team names'].append(dfp['teamName'].max())
                 progressor_df = pd.DataFrame(progressor_counts)
-                progressor_df['total'] = progressor_df['Progressive Passes']+progressor_df['Progressive Carries']
-                progressor_df = progressor_df.sort_values(by=['total', 'Progressive Passes'], ascending=[False, False])
+                progressor_df['total'] = progressor_df['Passes Progressivos']+progressor_df['Transporte Progressivo']
+                progressor_df = progressor_df.sort_values(by=['total', 'Passes Progressivos'], ascending=[False, False])
                 progressor_df.reset_index(drop=True, inplace=True)
                 progressor_df = progressor_df.head(10)
                 progressor_df['shortName'] = progressor_df['name'].apply(get_short_name)
@@ -4338,8 +4338,8 @@ if league and htn and atn and st.session_state.confirmed:
             
             def passer_bar(ax):
                 top10_progressors = progressor_df['shortName'][::-1].tolist()
-                progressor_pp = progressor_df['Progressive Passes'][::-1].tolist()
-                progressor_pc = progressor_df['Progressive Carries'][::-1].tolist()
+                progressor_pp = progressor_df['Passes Progressivos'][::-1].tolist()
+                progressor_pc = progressor_df['Transporte Progressivo'][::-1].tolist()
             
                 ax.barh(top10_progressors, progressor_pp, label='Prog. Pass', zorder=3, color=hcol, left=0)
                 ax.barh(top10_progressors, progressor_pc, label='Prog. Carry', zorder=3, color=acol, left=progressor_pp)
@@ -4586,7 +4586,7 @@ if league and htn and atn and st.session_state.confirmed:
         
 
 else:
-    st.write('Please Select a valid match info from Left Pannel and Click Confirm')
+    st.write('Selecione uma informação de correspondência válida no painel esquerdo e clique em Confirmar')
     
     
     
