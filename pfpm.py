@@ -2944,8 +2944,8 @@ if league and htn and atn and st.session_state.confirmed:
             fig.subplots_adjust(wspace=0.025)
             
             # Add text and images to the figure
-            fig.text(0.22, 0.98, f'{pname}', fontsize=40, fontweight='bold', ha='left', va='center')
-            fig.text(0.22, 0.94, f'in {hteamName} {hgoal_count} - {agoal_count} {ateamName}  |  Minutes played: {mins_played}', 
+            fig.text(0.25, 0.98, f'{pname}', fontsize=40, fontweight='bold', ha='left', va='center')
+            fig.text(0.25, 0.94, f'in {hteamName} {hgoal_count} - {agoal_count} {ateamName}  |  Minutes played: {mins_played}', 
                      fontsize=25, ha='left', va='center')
             fig.text(0.87, 0.995, '@Pehmsc', fontsize=15, ha='right', va='center')
 
