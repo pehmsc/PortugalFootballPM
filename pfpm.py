@@ -2911,10 +2911,22 @@ if league and htn and atn and st.session_state.confirmed:
             fig.text(0.21, 0.97, f'in {hteamName} {hgoal_count} - {agoal_count} {ateamName}  |  Minutes played: {mins_played}', 
                      fontsize=30, ha='left', va='center')
             fig.text(0.87, 0.995, '@Pehmsc', fontsize=20, ha='right', va='center')
-        
-            himage = urlopen(f"https://github.com/pehmsc/PF_Data/tree/9c5ef23ebc958dea20c931fb234b52dcd40faf50/Players/{pname}.png")
-            himage = Image.open(himage)
-            add_image(himage, fig, left=0.095, bottom=0.935, width=0.125, height=0.125)
+
+            # Encode pname to ensure it works in the URL
+            pname_encoded = quote(pname, safe="")
+
+            # Create the URL with the encoded pname
+            url = f"https://raw.githubusercontent.com/pehmsc/PF_Data/refs/heads/main/Players/{pname_encoded}.png"
+
+            # Open the image from the URL
+            try:
+                himage = urlopen(url)
+                himage = Image.open(himage)
+
+                # Add the image to the figure
+                add_image(himage, fig, left=0.095, bottom=0.935, width=0.125, height=0.125)
+            except Exception as e:
+                print(f"Error loading image: {e}")
             
             st.pyplot(fig)
             
