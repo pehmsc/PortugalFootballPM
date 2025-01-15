@@ -58,8 +58,8 @@ league = st.sidebar.selectbox('Selecione a Competição', ['Liga Portugal 2024-2
 
 # Step 3: Team selection
 if league == 'Liga Portugal 2024-25':
-    team_list = ['Arouca', 'AVS Futebol SAD', 'Benfica', 'Boavista', 'Braga', 'Casa Pia AC', 'Estoril', 'Estrela da Amadora', 'Famalicao', 'Farense', 'Gil Vicente', 'Moreirense', 'Nacional', 'Porto' 
-                 'Rio Ave', 'Santa Clara', 'Sporting CP', 'Vitoria de Guimaraes']
+    team_list = ['Arouca', 'AVS Futebol SAD', 'Benfica', 'Boavista', 'Braga', 'Casa Pia AC', 'Estoril', 'Estrela da Amadora', 'Famalicao', 'Farense', 'Gil Vicente', 'Moreirense', 'Nacional',
+                'Porto','Rio Ave', 'Santa Clara', 'Sporting CP', 'Vitoria de Guimaraes']
 #elif league == 'Premier League 2024-25':
     #team_list = ['Arsenal', 'Aston Villa', 'Bournemouth', 'Brentford', 'Brighton', 'Chelsea', 'Crystal Palace', 'Everton', 'Fulham', 'Ipswich', 'Leicester', 'Liverpool', 'Manchester City', 'Manchester United', 'Newcastle',
                 #'Nottingham Forest', 'Southampton', 'Tottenham', 'West Ham', 'Wolves']
@@ -148,6 +148,7 @@ if league and htn and atn and st.session_state.confirmed:
             players_away_df["teamId"] = data["matchCentreData"]['away']['teamId']
             players_df = pd.concat([players_home_df, players_away_df])
             players_df['name'] = players_df['name'].astype(str)
+            players_df['name'] = players_df['name'].apply(unidecode)
             players_ids = data["matchCentreData"]["playerIdNameDictionary"]
             
             return events_dict, players_df, teams_dict
