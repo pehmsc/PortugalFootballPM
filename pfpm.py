@@ -23,6 +23,7 @@ from PIL import Image
 from urllib.request import urlopen
 from unidecode import unidecode
 from scipy.spatial import ConvexHull
+from urllib.parse import quote
 import streamlit as st
 
 green = '#69f900'
