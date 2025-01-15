@@ -2912,7 +2912,7 @@ if league and htn and atn and st.session_state.confirmed:
                      fontsize=30, ha='left', va='center')
             fig.text(0.87, 0.995, '@Pehmsc', fontsize=20, ha='right', va='center')
         
-            himage = urlopen(f"https://images.fotmob.com/image_resources/logo/teamlogo/{ftmb_tid}.png")
+            himage = urlopen(f"https://raw.githubusercontent.com/pehmsc/PF_Data/refs/heads/main/Players/{pname}.png")
             himage = Image.open(himage)
             add_image(himage, fig, left=0.095, bottom=0.935, width=0.125, height=0.125)
             
