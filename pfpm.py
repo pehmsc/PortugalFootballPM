@@ -57,7 +57,7 @@ league = st.sidebar.selectbox('Selecione a Competição', ['Liga Portugal 2024-2
 
 # Step 3: Team selection
 if league == 'Liga Portugal 2024-25':
-    team_list = ['Arouca', 'AVS Futebol SAD', 'Benfica', 'Boavista', 'Braga', 'Casa Pia AC', 'Estoril', 'Estrela da Amadora', 'Famalicao', 'Farense', 'FC Porto', 'Gil Vicente', 'Moreirense', 'Nacional', 
+    team_list = ['Arouca', 'AVS Futebol SAD', 'Benfica', 'Boavista', 'Braga', 'Casa Pia AC', 'Estoril', 'Estrela da Amadora', 'Famalicao', 'Farense', 'Porto', 'Gil Vicente', 'Moreirense', 'Nacional', 
                  'Rio Ave', 'Santa Clara', 'Sporting CP', 'Vitoria de Guimaraes']
 #elif league == 'Premier League 2024-25':
     #team_list = ['Arsenal', 'Aston Villa', 'Bournemouth', 'Brentford', 'Brighton', 'Chelsea', 'Crystal Palace', 'Everton', 'Fulham', 'Ipswich', 'Leicester', 'Liverpool', 'Manchester City', 'Manchester United', 'Newcastle',
